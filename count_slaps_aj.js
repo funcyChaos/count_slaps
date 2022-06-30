@@ -2,7 +2,7 @@ function count_slaps(vote){
 
 	const counter1 = document.getElementById('slap1');
 	const counter2 = document.getElementById('slap2');
-	const div = document.getElementById('nonce-div');
+	const nonce = document.getElementById('nonce-btn').getAttribute('data-nonce');
 
 	fetch(myAjax.ajaxurl, {
 
@@ -10,7 +10,7 @@ function count_slaps(vote){
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
 		},
-		body: `action=count_slaps&nonce=${div.getAttribute('data-nonce')}&slap=${vote}`
+		body: `action=count_slaps&nonce=${nonce}&slap=${vote}`
 	})
 	.then(res=>res.json())
 	.then(object=>{
