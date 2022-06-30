@@ -1,6 +1,7 @@
 function count_slaps(vote){
 
-	// const userList = document.getElementById('userList');
+	const counter1 = document.getElementById('slap1');
+	const counter2 = document.getElementById('slap2');
 	const div = document.getElementById('nonce-div');
 
 	fetch(myAjax.ajaxurl, {
@@ -13,6 +14,14 @@ function count_slaps(vote){
 	})
 	.then(res=>res.json())
 	.then(object=>{
+
+		if(object['slap1']){
+
+			counter1.innerHTML = object['slap1'];
+		}else{
+
+			counter2.innerHTML = object['slap2'];
+		}
 
 		console.log(object);
 	});

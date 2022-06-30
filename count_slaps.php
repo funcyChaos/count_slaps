@@ -71,12 +71,20 @@ function render_frontend(){
 	<div id="nonce-div" data-nonce="<?php echo $nonce;?>">
 
 		<button onclick="count_slaps('slap1')">
-			number1
+			Slap 1
 		</button>
+		
+		<h4 id="slap1">
+			<?php echo get_option('slap1', 0);?>
+		</h4>
 
 		<button onclick="count_slaps('slap2')">
-			number2
+			Slap 2
 		</button>
+		
+		<h4 id="slap2">
+			<?php echo get_option('slap2', 0);?>
+		</h4>
 
 	</div>
 	<?php
