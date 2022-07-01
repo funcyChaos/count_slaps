@@ -63,6 +63,8 @@ function return_slaps(){
 add_action("wp_ajax_return_slaps", "return_slaps");	
 add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
+
+
 function slap_menu(){
 
 	add_menu_page(
@@ -72,7 +74,8 @@ function slap_menu(){
 		'edit_posts',
 		'manage_slaps',
 		'render_slap_menu',
-		'dashicons-thumbs-up'
+		'dashicons-thumbs-up',
+		3
 	);
 }
 
@@ -85,22 +88,23 @@ function render_slap_menu(){
 	<?php settings_fields( 'extra-post-info-settings' ); ?>
 	<?php do_settings_sections( 'extra-post-info-settings' ); ?>
 	<table class="form-table"><tr valign="top"><th scope="row">Extra post info:</th>
-	<td><input type="text" name="extra_post_info" value="<?php echo get_option( 'extra_post_info' ); ?>"/></td></tr></table>
+	<td><input type="text" name="slap_settings" value="<?php echo get_option( 'slap_settings' ); ?>"/></td></tr></table>
 	<?php submit_button(); ?>
 	</form>
 	<?php
 }
 
-function save_slap_settings(){
-
-
-}
-
-add_action( 'save_post_sponsor_ads', 'save_slap_settings', 10, 0);
-
-
-function update_extra_post_info(){register_setting( 'extra-post-info-settings', 'extra_post_info' );}
+function update_extra_post_info(){register_setting( 'extra-post-info-settings', 'slap_settings' );}
 add_action('admin_init', 'update_extra_post_info');
+
+// function save_slap_settings(){
+
+// 	update_option('slap_settings', $_REQUEST);
+// }
+
+// add_action( 'wp_ajax_save_options', 'save_slap_settings');
+
+
 
 
 function my_script_enqueuer(){
