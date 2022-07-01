@@ -63,6 +63,46 @@ function return_slaps(){
 add_action("wp_ajax_return_slaps", "return_slaps");	
 add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
+function slap_menu(){
+
+	add_menu_page(
+
+		'Slap Menu',
+		'Slap Menu',
+		'edit_posts',
+		'manage_slaps',
+		'render_slap_menu',
+		'dashicons-thumbs-up'
+	);
+}
+
+add_action('admin_menu', 'slap_menu');
+
+function render_slap_menu(){
+
+	?><h1>WordPress Extra Post Info</h1>
+	<form method="post" action="options.php">
+	<?php settings_fields( 'extra-post-info-settings' ); ?>
+	<?php do_settings_sections( 'extra-post-info-settings' ); ?>
+	<table class="form-table"><tr valign="top"><th scope="row">Extra post info:</th>
+	<td><input type="text" name="extra_post_info" value="<?php echo get_option( 'extra_post_info' ); ?>"/></td></tr></table>
+	<?php submit_button(); ?>
+	</form>
+	<?php
+}
+
+function save_slap_settings(){
+
+
+}
+
+add_action( 'save_post_sponsor_ads', 'save_slap_settings', 10, 0);
+
+
+function update_extra_post_info(){register_setting( 'extra-post-info-settings', 'extra_post_info' );}
+add_action('admin_init', 'update_extra_post_info');
+
+
 function my_script_enqueuer(){
 	
 	wp_register_script("count_slaps_aj", WP_PLUGIN_URL.'/count_slaps/count_slaps_aj.js');
