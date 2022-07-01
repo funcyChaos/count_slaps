@@ -68,12 +68,13 @@ function slap_btn_1(){
 	$nonce = wp_create_nonce("count_slaps_nonce");
 	?>
 
-	<button 
+	<button
 		onclick="count_slaps('slap1')"
 		id="nonce-btn"
 		data-nonce="<?php echo $nonce;?>"
+		class="slap-button"
 	>
-		Slap 1
+		SLAP!
 	</button>
 	<?php
 }
@@ -90,8 +91,8 @@ function slap_cnt_1(){
 function slap_btn_2(){
 
 	?>
-	<button onclick="count_slaps('slap2')">
-	Slap 2
+	<button onclick="count_slaps('slap2')" class="slap-button">
+		SLAP!
 	</button>
 	<?php
 }
