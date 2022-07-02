@@ -32,10 +32,10 @@ function count_slaps(){
 		}
 	}
 	
-	$itsOver['final'] = 'fuck off its over';
+	// $itsOver['final'] = 'fuck off its over';
+	// echo json_encode($itsOver);
 	
-	// echo json_encode($result);
-	echo json_encode($itsOver);
+	echo json_encode($result);
 	
 	die();
 }
@@ -63,6 +63,46 @@ function return_slaps(){
 add_action("wp_ajax_return_slaps", "return_slaps");	
 add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
+function reset_slaps(){
+
+	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+
+		exit("No naughty business please");
+	}
+
+	delete_option('slap1');
+	delete_option('slap2');
+
+	echo '{"result": "success"}';
+
+	die();
+}
+
+add_action('wp_ajax_reset_slaps', 'reset_slaps');
+add_action('wp_ajax_nopriv_reset_slaps', function(){die();});
+
+function toggle_slaps(){
+
+	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+
+		exit("No naughty business please");
+	}
+	
+	$return['slap1'] = get_option('slap1', 0);
+	$return['slap2'] = get_option('slap2', 0);
+	
+	$counting = get_option('toggle_counting', false);
+	update_option('toggle_counting', !$counting);
+	$return['state'] = !$counting;
+	
+	echo json_encode($return);
+
+	die();
+}
+
+add_action('wp_ajax_toggle_slaps', 'toggle_slaps');
+add_action('wp_ajax_nopriv_toggle_slaps', function(){die();});
+
 
 
 function slap_menu(){
@@ -83,14 +123,23 @@ add_action('admin_menu', 'slap_menu');
 
 function render_slap_menu(){
 
-	?><h1>WordPress Extra Post Info</h1>
-	<form method="post" action="options.php">
-	<?php settings_fields( 'extra-post-info-settings' ); ?>
-	<?php do_settings_sections( 'extra-post-info-settings' ); ?>
-	<table class="form-table"><tr valign="top"><th scope="row">Extra post info:</th>
-	<td><input type="text" name="slap_settings" value="<?php echo get_option( 'slap_settings' ); ?>"/></td></tr></table>
-	<?php submit_button(); ?>
-	</form>
+	?>
+	<h1>Slap Counter Settings</h1>
+
+	<h3>Slap 1:</h3>
+	<p id="slap1"><?php //echo get_option('slap1', 0);?></p>
+	<h3>Slap 2:</h3>
+	<p id="slap2"><?php //echo get_option('slap2', 0);?></p>
+	<button onclick="adminReset()">Reset Slaps</button>
+	<button onclick="returnSlaps()">Refresh Slaps</button>
+	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>
+	<?php
+	$nonce = wp_create_nonce("count_slaps_nonce");
+	?>
+	<div
+		id="nonce-div"
+		data-nonce="<?php echo $nonce;?>"
+	></div>
 	<?php
 }
 
