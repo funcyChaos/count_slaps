@@ -72,9 +72,6 @@ function returnSlaps(){
 	});
 }
 
-
-
-
 function showBonus(team){
 
 	bonus = document.getElementById(`${team}-bonus`);
@@ -92,7 +89,7 @@ async function ajaxFetch(action, nonce, x, y){
 	var1 = x ? x : false;
 	var2 = y ? y : false;
 
-	const ajax = fetch(myAjax.ajaxurl, {
+	const ajax = fetch(ajax.ajaxurl, {
 
 		method: "POST",
 		headers: {
