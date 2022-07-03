@@ -8,42 +8,47 @@
 	Author URI: https://funcychaos.github.io
 */
 
-function count_slaps(){
+// Slap a team!
+function slap(){
 	
 	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
 
 		exit("No naughty business please");
 	}
 	
-	if($_REQUEST['slap'] == 'slap1'){
+	if(get_option('toggle_counting')){
 		
-		$result['slap1'] = get_option('slap1', 0);
-		update_option('slap1', ++$result['slap1']);
-	}else{
-		
-		if($_REQUEST['bonus'] == 'true'){
-
-			$result['slap2'] = get_option('slap2', 0);	
-			update_option('slap2', $result['slap2'] + 6);
+		if($_REQUEST['var1'] == 'slap1'){
+			
+			$result['slap1'] = get_option('slap1', 0);
+			update_option('slap1', ++$result['slap1']);
 		}else{
-
-			$result['slap2'] = get_option('slap2', 0);
-			update_option('slap2', ++$result['slap2']);
+			
+			if($_REQUEST['var2'] == 'true'){
+	
+				$result['slap2'] = get_option('slap2', 0);	
+				update_option('slap2', $result['slap2'] + 6);
+			}else{
+	
+				$result['slap2'] = get_option('slap2', 0);
+				update_option('slap2', ++$result['slap2']);
+			}
 		}
+	}else{
+
+		$result['slap1'] = get_option('slap1', 0);
+		$result['slap2'] = get_option('slap2', 0);
 	}
-	
-	// $itsOver['final'] = 'fuck off its over';
-	// echo json_encode($itsOver);
-	
+		
 	echo json_encode($result);
 	
 	die();
 }
 
-// This guy is hooking count_slaps into the admin-ajax file
-add_action("wp_ajax_count_slaps", "count_slaps");	
-add_action("wp_ajax_nopriv_count_slaps", "count_slaps");
+add_action("wp_ajax_slap", "slap");	
+add_action("wp_ajax_nopriv_slap", "slap");
 
+// I guess get slaps would have made more sense
 function return_slaps(){
 	
 	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
@@ -59,10 +64,10 @@ function return_slaps(){
 	die();
 }
 
-// This guy is hooking count_slaps into the admin-ajax file
 add_action("wp_ajax_return_slaps", "return_slaps");	
 add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
+// Set all slaps back to 0
 function reset_slaps(){
 
 	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
@@ -81,6 +86,7 @@ function reset_slaps(){
 add_action('wp_ajax_reset_slaps', 'reset_slaps');
 add_action('wp_ajax_nopriv_reset_slaps', function(){die();});
 
+// Turn slap counting on and off
 function toggle_slaps(){
 
 	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
@@ -103,8 +109,7 @@ function toggle_slaps(){
 add_action('wp_ajax_toggle_slaps', 'toggle_slaps');
 add_action('wp_ajax_nopriv_toggle_slaps', function(){die();});
 
-
-
+// Register admin slap menu
 function slap_menu(){
 
 	add_menu_page(
@@ -121,6 +126,7 @@ function slap_menu(){
 
 add_action('admin_menu', 'slap_menu');
 
+// What the admin slap menu actually looks like
 function render_slap_menu(){
 
 	?>
@@ -143,43 +149,11 @@ function render_slap_menu(){
 	<?php
 }
 
-function update_extra_post_info(){register_setting( 'extra-post-info-settings', 'slap_settings' );}
-add_action('admin_init', 'update_extra_post_info');
-
-// function save_slap_settings(){
-
-// 	update_option('slap_settings', $_REQUEST);
-// }
-
-// add_action( 'wp_ajax_save_options', 'save_slap_settings');
-
-
-
-
-function my_script_enqueuer(){
-	
-	wp_register_script("count_slaps_aj", WP_PLUGIN_URL.'/count_slaps/count_slaps_aj.js');
-	
-	// This seems like the key to the communication between ajax and jquery
-	wp_localize_script('count_slaps_aj', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php'))
-	);
-
-	wp_enqueue_script('count_slaps_aj');
-}
-
-// Okay This is adding the javascript in as... an alternative? takes away reloads
-add_action('init', 'my_script_enqueuer');
-
-function count_slaps_styles(){
-	wp_enqueue_style('styles', plugin_dir_url(__FILE__)."/count_slaps.css");
-}
-
-add_action('wp_enqueue_scripts', 'count_slaps_styles');
-
+// Count Slaps Shortcodes!
 function slap_btn_1(){
 	
 	?>
-	<button onclick="count_slaps('slap1')" class="slap-button">
+	<button onclick="slap('slap1')" class="slap-button">
 		SLAP!
 	</button>
 	<?php
@@ -188,7 +162,7 @@ function slap_btn_1(){
 function slap_btn_2(){
 	
 	?>
-	<button onclick="count_slaps('slap2')" class="slap-button">
+	<button onclick="slap('slap2')" class="slap-button">
 		SLAP!
 	</button>
 	<?php
@@ -208,3 +182,23 @@ function nonce_div(){
 add_shortcode('slap_btn_1' , 'slap_btn_1');
 add_shortcode('slap_btn_2' , 'slap_btn_2');
 add_shortcode('nonce_div', 'nonce_div');
+	
+
+// Get all the javascript on the page and with proper variables :P
+function my_script_enqueuer(){
+	
+	wp_register_script("count_slaps_aj", WP_PLUGIN_URL.'/count_slaps/count_slaps_aj.js');
+	wp_localize_script('count_slaps_aj', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php'))
+	);
+	wp_enqueue_script('count_slaps_aj');
+}
+
+add_action('init', 'my_script_enqueuer');
+
+// Count slaps styles :P
+function count_slaps_styles(){
+
+	wp_enqueue_style('styles', plugin_dir_url(__FILE__)."/count_slaps.css");
+}
+
+add_action('wp_enqueue_scripts', 'count_slaps_styles');
