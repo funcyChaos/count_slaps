@@ -91,6 +91,21 @@ class Count_Slaps_Public {
 		die();
 	}
 
+	public function return_slaps(){
+	
+		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+	
+			exit("No naughty business please");
+		}
+		
+		$return['slap1'] = get_option('slap1', 0);
+		$return['slap2'] = get_option('slap2', 0);
+		
+		echo json_encode($return);
+		
+		die();
+	}
+
 	// Count Slaps Shortcodes!
 	public function slap_btn_1(){
 		
@@ -163,8 +178,9 @@ class Count_Slaps_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/count-slaps-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__).'js/count-slaps-public.js', array(), $this->version, false);
 
+		wp_localize_script($this->plugin_name, 'ajax', array('ajaxurl' => admin_url('admin-ajax.php'))
+		);
 	}
-
 }

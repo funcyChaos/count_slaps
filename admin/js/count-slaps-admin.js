@@ -1,32 +1,73 @@
-(function( $ ) {
-	'use strict';
+let bonusBool = false;
+let counter1;
+let counter2;
+let nonce;
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+document.addEventListener('DOMContentLoaded', ()=>{
 
-})( jQuery );
+	counter1 = document.getElementById('slap1');
+	counter2 = document.getElementById('slap2');
+	nonce = document.getElementById('nonce-div').getAttribute('data-nonce');
+
+	ajaxFetch('return_slaps', nonce).then(object=>{
+		
+		counter1.innerHTML = object['slap1'];
+		counter2.innerHTML = object['slap2'];
+		console.log(object);
+	});
+});
+
+function adminReset(){
+
+	ajaxFetch('reset_slaps', nonce).then(object=>{
+
+		console.log(object);
+		counter1.innerHTML = '0';
+		counter2.innerHTML = '0';
+	});
+}
+
+function toggleCounting(){
+
+	ajaxFetch('toggle_slaps', nonce).then(object=>{
+
+		console.log(object);
+		counter1.innerHTML = object['slap1'];
+		counter2.innerHTML = object['slap2'];
+		document.getElementById('count-toggle').innerHTML = object['state'] ? 'Stop Counting' : 'Start Counting';
+	})
+}
+
+function returnSlaps(){
+
+	console.log('how')
+
+	ajaxFetch('return_slaps', nonce).then(object=>{
+		
+		counter1.innerHTML = object['slap1'];
+		counter2.innerHTML = object['slap2'];
+		console.log(object);
+	});
+}
+
+async function ajaxFetch(action, nonce, x, y){
+
+	var1 = x ? x : false;
+	var2 = y ? y : false;
+
+	const ajaxReq = fetch(ajax.ajaxurl, {
+
+		method: "POST",
+		headers: {
+
+			'content-Type': 'application/x-www-form-urlencoded; charset-UTF-8'
+		},
+		body: `action=${action}&nonce=${nonce}&var1=${var1}&var2=${var2}`
+	});
+
+	const data = (await ajaxReq).json();
+
+	const object = await data;
+
+	return object;
+}

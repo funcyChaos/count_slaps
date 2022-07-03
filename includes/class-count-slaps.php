@@ -140,7 +140,6 @@ class Count_Slaps {
 		$plugin_i18n = new Count_Slaps_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**
@@ -157,6 +156,13 @@ class Count_Slaps {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action('admin_menu', $plugin_admin, 'slap_menu');
+
+		$this->loader->add_action('wp_ajax_toggle_slaps', $plugin_admin, 'toggle_slaps');
+		$this->loader->add_action('wp_ajax_nopriv_toggle_slaps', $plugin_admin, 'no_admin');
+
+		$this->loader->add_action('wp_ajax_reset_slaps', $plugin_admin, 'reset_slaps');
+		$this->loader->add_action('wp_ajax_nopriv_reset_slaps', $plugin_admin, 'no_admin');
 	}
 
 	/**
@@ -175,6 +181,9 @@ class Count_Slaps {
 		
 		$this->loader->add_action('wp_ajax_slap', $plugin_public, 'slap');
 		$this->loader->add_action('wp_ajax_nopriv_slap', $plugin_public, 'slap');
+
+		$this->loader->add_action('wp_ajax_return_slaps', $plugin_public, 'return_slaps');
+		$this->loader->add_action('wp_ajax_nopriv_return_slaps', $plugin_public, 'return_slaps');
 
 		$this->loader->add_shortcode('slap_btn_1', $plugin_public, 'slap_btn_1');
 		$this->loader->add_shortcode('slap_btn_2', $plugin_public, 'slap_btn_2');

@@ -53,6 +53,78 @@ class Count_Slaps_Admin {
 		$this->version = $version;
 
 	}
+	
+	public function slap_menu(){
+
+		add_menu_page(
+	
+			'Slap Menu',
+			'Slap Menu',
+			'edit_posts',
+			'manage_slaps',
+			array($this, 'render_slap_menu'),
+			'dashicons-thumbs-up',
+			3
+		);
+	}
+
+	public function render_slap_menu(){
+
+		?>
+		<h1>Slap Counter Settings</h1>
+	
+		<h3>Slap 1:</h3>
+		<p id="slap1"><?php //echo get_option('slap1', 0);?></p>
+		<h3>Slap 2:</h3>
+		<p id="slap2"><?php //echo get_option('slap2', 0);?></p>
+		<button onclick="adminReset()">Reset Slaps</button>
+		<button onclick="returnSlaps()">Refresh Slaps</button>
+		<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>
+		<?php
+		$nonce = wp_create_nonce("count_slaps_nonce");
+		?>
+		<div
+			id="nonce-div"
+			data-nonce="<?php echo $nonce;?>"
+		></div>
+		<?php
+	}
+
+	public function reset_slaps(){
+
+		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+	
+			exit("No naughty business please");
+		}
+	
+		delete_option('slap1');
+		delete_option('slap2');
+	
+		echo '{"result": "success"}';
+	
+		die();
+	}
+
+	public function toggle_slaps(){
+
+		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+	
+			exit("No naughty business please");
+		}
+		
+		$return['slap1'] = get_option('slap1', 0);
+		$return['slap2'] = get_option('slap2', 0);
+		
+		$counting = get_option('toggle_counting', false);
+		update_option('toggle_counting', !$counting);
+		$return['state'] = !$counting;
+		
+		echo json_encode($return);
+	
+		die();
+	}
+
+	public function no_admin(){die();}
 
 	/**
 	 * Register the stylesheets for the admin area.
@@ -96,8 +168,9 @@ class Count_Slaps_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/count-slaps-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__).'js/count-slaps-admin.js', array(), $this->version, false);
 
+		wp_localize_script($this->plugin_name, 'ajax', array('ajaxurl' => admin_url('admin-ajax.php'))
+		);
 	}
-
 }
