@@ -185,15 +185,29 @@ add_shortcode('nonce_div', 'nonce_div');
 	
 
 // Get all the javascript on the page and with proper variables :P
-function my_script_enqueuer(){
+function public_script(){
 	
-	wp_register_script("count_slaps_aj", WP_PLUGIN_URL.'/count_slaps/count_slaps_aj.js');
-	wp_localize_script('count_slaps_aj', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php'))
+	wp_register_script('count_slaps_public', plugin_dir_url(__FILE__).'	public.js');
+
+	wp_localize_script('count_slaps_public', 'ajax', array('ajaxurl' => admin_url('admin-ajax.php'))
 	);
-	wp_enqueue_script('count_slaps_aj');
+
+	wp_enqueue_script('count_slaps_public');
 }
 
-add_action('init', 'my_script_enqueuer');
+add_action('wp_enqueue_scripts', 'public_script');
+
+function admin_script(){
+	
+	wp_register_script('count_slaps_admin', plugin_dir_url(__FILE__).'	admin.js');
+
+	wp_localize_script('count_slaps_admin', 'ajax', array('ajaxurl' => admin_url('admin-ajax.php'))
+	);
+
+	wp_enqueue_script('count_slaps_admin');
+}
+
+add_action('admin_enqueue_scripts', 'admin_script');
 
 // Count slaps styles :P
 function count_slaps_styles(){
