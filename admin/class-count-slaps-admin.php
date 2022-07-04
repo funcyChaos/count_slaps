@@ -40,6 +40,8 @@ class Count_Slaps_Admin {
 	 */
 	private $version;
 
+	private $admin_nonce = 'fota_secret_password';
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -54,6 +56,42 @@ class Count_Slaps_Admin {
 
 	}
 	
+	public function reset_slaps(){
+		
+		if(!wp_verify_nonce($_REQUEST['nonce'], $this->admin_nonce)){
+	
+			exit('{"response": "GTFOH!"}');
+		}
+	
+		delete_option('slap1');
+		delete_option('slap2');
+		
+		echo '{"result": "success"}';
+		
+		die();
+	}
+
+	public function toggle_slaps(){
+
+		if(!wp_verify_nonce($_REQUEST['nonce'], $this->admin_nonce)){
+			
+			exit('{"response": "GTFOH!"}');
+		}
+		
+		$return['slap1'] = get_option('slap1', 0);
+		$return['slap2'] = get_option('slap2', 0);
+		
+		$counting = get_option('toggle_counting', false);
+		update_option('toggle_counting', !$counting);
+		$return['state'] = !$counting;
+		
+		echo json_encode($return);
+		
+		die();
+	}
+
+	public function no_admin(){die();}
+
 	public function slap_menu(){
 
 		add_menu_page(
@@ -81,7 +119,7 @@ class Count_Slaps_Admin {
 		<button onclick="returnSlaps()">Refresh Slaps</button>
 		<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>
 		<?php
-		$nonce = wp_create_nonce("count_slaps_nonce");
+		$nonce = wp_create_nonce($this->admin_nonce);
 		?>
 		<div
 			id="nonce-div"
@@ -89,43 +127,7 @@ class Count_Slaps_Admin {
 		></div>
 		<?php
 	}
-
-	public function reset_slaps(){
-
-		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
 	
-			exit("No naughty business please");
-		}
-	
-		delete_option('slap1');
-		delete_option('slap2');
-	
-		echo '{"result": "success"}';
-	
-		die();
-	}
-
-	public function toggle_slaps(){
-
-		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
-	
-			exit("No naughty business please");
-		}
-		
-		$return['slap1'] = get_option('slap1', 0);
-		$return['slap2'] = get_option('slap2', 0);
-		
-		$counting = get_option('toggle_counting', false);
-		update_option('toggle_counting', !$counting);
-		$return['state'] = !$counting;
-		
-		echo json_encode($return);
-	
-		die();
-	}
-
-	public function no_admin(){die();}
-
 	/**
 	 * Register the stylesheets for the admin area.
 	 *

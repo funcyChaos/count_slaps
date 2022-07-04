@@ -40,6 +40,8 @@ class Count_Slaps_Public {
 	 */
 	private $version;
 
+	private $public_nonce = 'count_slaps_nonce';
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -57,9 +59,9 @@ class Count_Slaps_Public {
 	// Slap a team!
 	public function slap(){
 		
-		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+		if(!wp_verify_nonce($_REQUEST['nonce'], $this->public_nonce)){
 
-			exit("No naughty business please");
+			exit('{"response": "GTFOH!"}');
 		}
 		
 		if(get_option('toggle_counting')){
@@ -92,11 +94,6 @@ class Count_Slaps_Public {
 	}
 
 	public function return_slaps(){
-	
-		if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
-	
-			exit("No naughty business please");
-		}
 		
 		$return['slap1'] = get_option('slap1', 0);
 		$return['slap2'] = get_option('slap2', 0);
@@ -127,12 +124,12 @@ class Count_Slaps_Public {
 
 	public function nonce_div(){
 
-		$nonce = wp_create_nonce("count_slaps_nonce");
+		$nonce = wp_create_nonce($this->public_nonce);
 		?>
 			<div
 				id="nonce-div"
 				data-nonce="<?php echo $nonce;?>"
-			></div>
+			><?php echo $this->public_nonce;?></div>
 		<?php
 	}
 
