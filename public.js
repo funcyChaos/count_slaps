@@ -45,7 +45,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	counter2 = document.getElementById('slap2');
 	nonce = document.getElementById('nonce-div').getAttribute('data-nonce');
 
-	ajaxFetch('return_slaps', nonce).then(object=>{
+	console.log(nonce);
+
+	ajaxFetch('return_slaps').then(object=>{
 		
 		counter1.innerHTML = object['slap1'];
 		counter2.innerHTML = object['slap2'];

@@ -8,12 +8,15 @@
 	Author URI: https://funcychaos.github.io
 */
 
+// 'count_slaps_nonce' = 'count_slaps_nonce';
+// 'fota_secret_password' = 'fota_secret_password';
+
 // Slap a team!
 function slap(){
 	
-	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+	if(!wp_verify_nonce($_REQUEST['nonce'], 'count_slaps_nonce')){
 
-		exit("No naughty business please");
+		exit('{"response": "GTFOH!"}');
 	}
 	
 	if(get_option('toggle_counting')){
@@ -51,11 +54,6 @@ add_action("wp_ajax_nopriv_slap", "slap");
 // I guess get slaps would have made more sense
 function return_slaps(){
 	
-	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
-
-		exit("No naughty business please");
-	}
-	
 	$return['slap1'] = get_option('slap1', 0);
 	$return['slap2'] = get_option('slap2', 0);
 	
@@ -70,9 +68,9 @@ add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 // Set all slaps back to 0
 function reset_slaps(){
 
-	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){
 
-		exit("No naughty business please");
+		exit('{"response": "GTFOH!"}');
 	}
 
 	delete_option('slap1');
@@ -89,9 +87,9 @@ add_action('wp_ajax_nopriv_reset_slaps', function(){die();});
 // Turn slap counting on and off
 function toggle_slaps(){
 
-	if(!wp_verify_nonce($_REQUEST['nonce'], "count_slaps_nonce")){
+	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){
 
-		exit("No naughty business please");
+		exit('{"response": "GTFOH!"}');
 	}
 	
 	$return['slap1'] = get_option('slap1', 0);
@@ -130,6 +128,8 @@ add_action('admin_menu', 'slap_menu');
 function render_slap_menu(){
 
 	?>
+	<p><?php echo 'fota_secret_password';?></p>
+	<p><?php echo 'count_slaps_nonce';?></p>
 	<h1>Slap Counter Settings</h1>
 
 	<h3>Slap 1:</h3>
@@ -140,7 +140,7 @@ function render_slap_menu(){
 	<button onclick="returnSlaps()">Refresh Slaps</button>
 	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>
 	<?php
-	$nonce = wp_create_nonce("count_slaps_nonce");
+	$nonce = wp_create_nonce('fota_secret_password');
 	?>
 	<div
 		id="nonce-div"
@@ -170,7 +170,9 @@ function slap_btn_2(){
 
 function nonce_div(){
 
-	$nonce = wp_create_nonce("count_slaps_nonce");
+	$nonce = wp_create_nonce('count_slaps_nonce');
+
+	echo 'count_slaps_nonce';
 	?>
 		<div
 			id="nonce-div"
