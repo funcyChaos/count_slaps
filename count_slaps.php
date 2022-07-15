@@ -130,9 +130,9 @@ function render_slap_menu(){
 	?>
 	<h1>Slap Counter Settings</h1>
 	<h3>Slap 1:</h3>
-	<p id="slap1"><?php //echo get_option('slap1', 0);?></p>
+	<p id="slap1"><?php echo get_option('slap1', 0);?></p>
 	<h3>Slap 2:</h3>
-	<p id="slap2"><?php //echo get_option('slap2', 0);?></p>
+	<p id="slap2"><?php echo get_option('slap2', 0);?></p>
 	<button onclick="adminReset()">Reset Slaps</button>
 	<button onclick="returnSlaps()">Refresh Slaps</button>
 	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>

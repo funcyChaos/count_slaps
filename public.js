@@ -12,7 +12,7 @@ function slap(vote){
 		if(object['slap1']){
 
 			counter1.innerHTML = object['slap1'];
-		}else{
+		}else if(object['slap2']){
 			
 			counter2.innerHTML = object['slap2'];
 			
