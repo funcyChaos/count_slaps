@@ -128,10 +128,7 @@ add_action('admin_menu', 'slap_menu');
 function render_slap_menu(){
 
 	?>
-	<p><?php echo 'fota_secret_password';?></p>
-	<p><?php echo 'count_slaps_nonce';?></p>
 	<h1>Slap Counter Settings</h1>
-
 	<h3>Slap 1:</h3>
 	<p id="slap1"><?php //echo get_option('slap1', 0);?></p>
 	<h3>Slap 2:</h3>
@@ -172,7 +169,6 @@ function nonce_div(){
 
 	$nonce = wp_create_nonce('count_slaps_nonce');
 
-	echo 'count_slaps_nonce';
 	?>
 		<div
 			id="nonce-div"
