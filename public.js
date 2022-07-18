@@ -21,8 +21,8 @@ class SlapCounter{
 			this.ajaxFetch('tally_slaps').then(object=>{
 				
 				console.log(object);
-				this.cnt1inner = object['slap1'];
-				this.cnt2inner = object['slap2'];
+				this._xmlcounter1 = object['slap1'];
+				this._xmlcounter2 = object['slap2'];
 			});
 			
 			this.counter1 = 0;
@@ -30,8 +30,8 @@ class SlapCounter{
 		}, 3000);
 	}
 
-	set cnt1inner(x){this.xmlcounter1.innerHTML = x;}
-	set cnt2inner(x){this.xmlcounter2.innerHTML = x;}
+	set _xmlcounter1(x){this.xmlcounter1.innerHTML = x;}
+	set _xmlcounter2(x){this.xmlcounter2.innerHTML = x;}
 
 	slap(vote){
 		
@@ -60,7 +60,7 @@ class SlapCounter{
 					this.slap2bonus = true;
 				}
 
-				if(current.getSeconds() - this.timeDiff.getSeconds() > 10)this.slap2bonus = false;
+				if(current.getSeconds() - this.timeDiff.getSeconds() > 6)this.slap2bonus = false;
 
 				this.counter2 += 6;
 				this.showBonus(vote);
@@ -108,8 +108,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	
 	counter.ajaxFetch('return_slaps').then(object=>{
 		
-		counter.cnt1inner = object['slap1'];
-		counter.cnt2inner = object['slap2'];
+		counter._xmlcounter1 = object['slap1'];
+		counter._xmlcounter2 = object['slap2'];
 		console.log(object);
 	});
-});
+})

@@ -14,17 +14,22 @@ function returnSlaps(){
 }
 
 function adminReset(){
+
+	const sure = confirm('Are you sure you want to reset all the slaps?');
 	
-	ajaxFetch('reset_slaps', nonce).then(object=>{
-		
-		console.log(object);
-		counter1.innerHTML = '0';
-		counter2.innerHTML = '0';
-	});
+	if(sure){
+
+		ajaxFetch('reset_slaps', nonce).then(object=>{
+			
+			console.log(object);
+			counter1.innerHTML = '0';
+			counter2.innerHTML = '0';
+		});
+	}
 }
 
 function toggleCounting(){
-	
+
 	ajaxFetch('toggle_slaps', nonce).then(object=>{
 		
 		console.log(object);
