@@ -8,9 +8,6 @@
 	Author URI: https://funcychaos.github.io
 */
 
-// 'count_slaps_nonce' = 'count_slaps_nonce';
-// 'fota_secret_password' = 'fota_secret_password';
-
 // Slap a team!
 function slap(){
 	
