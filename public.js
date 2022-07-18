@@ -1,6 +1,7 @@
 let counter1;
 let counter2;
 let nonce;
+let timer = false;
 
 function slap(vote){
 
@@ -13,6 +14,17 @@ function slap(vote){
 	}else if(vote == 'slap2'){
 		
 		bonus = (parseInt(counter2.innerHTML) + 1) % 666 == 0 ? true : false;
+		const compare = new Date();
+
+		if(bonus)timer = new Date();
+
+		if(timer){
+
+			if(timer.getMinutes() == compare.getMinutes()){
+				
+				bonus = true;
+			}else{timer = false;}
+		}
 	}
 
 	ajaxFetch('slap', nonce, vote, bonus).then(object=>{
