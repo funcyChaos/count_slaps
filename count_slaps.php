@@ -24,18 +24,13 @@ function slap(){
 		if($_REQUEST['var1'] == 'slap1'){
 			
 			$result['slap1'] = get_option('slap1', 0);
-			update_option('slap1', ++$result['slap1']);
-		}else{
+			$update = $_REQUEST['var2'] == 'true' ? $result['slap1'] += 2 : ++$result['slap1'];
+			update_option('slap1', $update);
+		}elseif($_REQUEST['var1'] == 'slap2'){
 			
-			if($_REQUEST['var2'] == 'true'){
-	
-				$result['slap2'] = get_option('slap2', 0);	
-				update_option('slap2', $result['slap2'] + 6);
-			}else{
-	
-				$result['slap2'] = get_option('slap2', 0);
-				update_option('slap2', ++$result['slap2']);
-			}
+			$result['slap2'] = get_option('slap2', 0);	
+			$update = $_REQUEST['var2'] == 'true' ? $result['slap2'] += 6 : ++$result['slap2'];
+			update_option('slap2', $update);
 		}
 	}else{
 

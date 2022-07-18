@@ -23,3 +23,9 @@
 	opacity: 0;
 	transition-duration: .2s;
 }
+
+#team1-bonus, #team2-bonus, #team3-bonus, #team4-bonus{
+
+	opacity: 0;
+	transition-duration: .2s;
+}

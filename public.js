@@ -1,42 +1,37 @@
-let bonusBool = false;
 let counter1;
 let counter2;
 let nonce;
 
 function slap(vote){
+
+	let bonus = false;
 	
-	bonusBool = (parseInt(counter2.innerHTML) + 1) % 666 == 0 ? true : false;
+	if(vote == 'slap1'){
+		
+		const current = new Date();
+		bonus = current.getMinutes() == 0 ? true : false;
+	}else if(vote == 'slap2'){
+		
+		bonus = (parseInt(counter2.innerHTML) + 1) % 666 == 0 ? true : false;
+	}
 
-	ajaxFetch('slap', nonce, vote, bonusBool).then(object=>{
+	ajaxFetch('slap', nonce, vote, bonus).then(object=>{
 
-		if(object['slap1']){
-
-			counter1.innerHTML = object['slap1'];
-		}else if(object['slap2']){
-			
-			counter2.innerHTML = object['slap2'];
-			
-			if(bonusBool){
-
-				showBonus('team2');
-				console.log(bonusBool);
-			}
-		}
-
+		if(bonus)showBonus(vote);
 		console.log(object);
 	});
 }
 
-function showBonus(team){
+function showBonus(vote){
 	
-	bonus = document.getElementById(`${team}-bonus`);
+	const bonus = document.getElementById(`${vote}-bonus`);
 	
 	bonus.style.opacity = 1;
 	
 	setTimeout(()=>{
 		
 		bonus.style.opacity = 0;
-	}, 100);
+	}, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -45,14 +40,21 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	counter2 = document.getElementById('slap2');
 	nonce = document.getElementById('nonce-div').getAttribute('data-nonce');
 
-	console.log(nonce);
-
 	ajaxFetch('return_slaps').then(object=>{
 		
 		counter1.innerHTML = object['slap1'];
 		counter2.innerHTML = object['slap2'];
 		console.log(object);
 	});
+
+	setInterval(()=>{
+		
+		ajaxFetch('return_slaps').then(object=>{
+		
+			counter1.innerHTML = object['slap1'];
+			counter2.innerHTML = object['slap2'];
+		});
+	}, 3000);
 });
 
 async function ajaxFetch(action, nonce, x, y){
