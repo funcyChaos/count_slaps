@@ -9,7 +9,7 @@
 */
 
 // Slap a team!
-function slap(){
+function tally_slaps(){
 	
 	if(!wp_verify_nonce($_REQUEST['nonce'], 'count_slaps_nonce')){
 
@@ -17,18 +17,14 @@ function slap(){
 	}
 	
 	if(get_option('toggle_counting')){
-		
-		if($_REQUEST['var1'] == 'slap1'){
-			
-			$result['slap1'] = get_option('slap1', 0);
-			$update = $_REQUEST['var2'] == 'true' ? $result['slap1'] += 2 : ++$result['slap1'];
-			update_option('slap1', $update);
-		}elseif($_REQUEST['var1'] == 'slap2'){
-			
-			$result['slap2'] = get_option('slap2', 0);	
-			$update = $_REQUEST['var2'] == 'true' ? $result['slap2'] += 6 : ++$result['slap2'];
-			update_option('slap2', $update);
-		}
+
+		$counter3 = get_option('slap1', 0)+$_REQUEST['slap1'];
+		$counter4 = get_option('slap2', 0)+$_REQUEST['slap2'];
+
+		update_option('slap1', $counter3);
+		update_option('slap2', $counter4);
+		$result['slap1'] = $counter3;
+		$result['slap2'] = $counter4;
 	}else{
 
 		$result['slap1'] = get_option('slap1', 0);
@@ -40,8 +36,8 @@ function slap(){
 	die();
 }
 
-add_action("wp_ajax_slap", "slap");	
-add_action("wp_ajax_nopriv_slap", "slap");
+add_action("wp_ajax_tally_slaps", "tally_slaps");	
+add_action("wp_ajax_nopriv_tally_slaps", "tally_slaps");
 
 // I guess get slaps would have made more sense
 function return_slaps(){
@@ -142,7 +138,7 @@ function render_slap_menu(){
 function slap_btn_1(){
 	
 	?>
-	<button onclick="slap('slap1')" class="slap-button">
+	<button id="slap1btn" class="slap-button">
 		SLAP!
 	</button>
 	<?php
@@ -151,9 +147,37 @@ function slap_btn_1(){
 function slap_btn_2(){
 	
 	?>
-	<button onclick="slap('slap2')" class="slap-button">
+	<button id="slap2btn" class="slap-button">
 		SLAP!
 	</button>
+	<?php
+}
+
+function slap_counter_1(){
+
+	?>
+	<h1 id="slap1"><?php echo get_option('slap1', 0);?></h1>
+	<?php
+}
+
+function slap_counter_2(){
+
+	?>
+	<h1 id="slap2"><?php echo get_option('slap2', 0);?></h1>
+	<?php
+}
+
+function bonus1(){
+
+	?>
+	<h1 id="slap1-bonus" class="bonus-styles">BONUS!</h1>
+	<?php
+}
+
+function bonus2(){
+
+	?>
+	<h1 id="slap2-bonus" class="bonus-styles">BONUS!</h1>
 	<?php
 }
 
@@ -171,6 +195,10 @@ function nonce_div(){
 
 add_shortcode('slap_btn_1' , 'slap_btn_1');
 add_shortcode('slap_btn_2' , 'slap_btn_2');
+add_shortcode('slap_counter_1' , 'slap_counter_1');
+add_shortcode('slap_counter_2' , 'slap_counter_2');
+add_shortcode('render_bonus1' , 'bonus1');
+add_shortcode('render_bonus2' , 'bonus2');
 add_shortcode('nonce_div', 'nonce_div');
 	
 

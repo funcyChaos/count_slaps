@@ -12,19 +12,13 @@
 	border-radius: 45px;
 }
 
-#slap1, #slap2{
+/* #slap1, #slap2{
 
 	font-size: xx-large;
 	text-align: center;
-}
+} */
 
-.team2-bonus-styles{
-
-	opacity: 0;
-	transition-duration: .2s;
-}
-
-#team1-bonus, #team2-bonus, #team3-bonus, #team4-bonus{
+.bonus-styles{
 
 	opacity: 0;
 	transition-duration: .2s;
