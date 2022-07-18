@@ -3,7 +3,7 @@
 /*
 	Plugin Name: count_slaps
 	Description: Plugin to keep track of chili's slaps
-	Version: 1.0
+	Version: 1.2
 	Author: funcyChaos
 	Author URI: https://funcychaos.github.io
 */
