@@ -4,53 +4,53 @@ class SlapCounter{
 
 		this.nonce = document.getElementById('nonce-div').getAttribute('data-nonce');
 
-		this.counter1 = 0;
-		this.counter2 = 0;
+		this.slapCount1 = 0;
+		this.slapCount2 = 0;
 
-		this.timeDiff = 30;
+		this.xmlCount1 = document.getElementById('xml_count_1');
+		this.xmlCount2 = document.getElementById('xml_count_2');
+
+		this.timeDiff = false;
 		this.slap2bonus = false;
 
-		this.xmlcounter1 = document.getElementById('slap1');
-		this.xmlcounter2 = document.getElementById('slap2');
-
-		document.getElementById('slap1btn').addEventListener('click',()=>this.slap('slap1'));
-		document.getElementById('slap2btn').addEventListener('click',()=>this.slap('slap2'));
+		document.getElementById('slap_btn_1').addEventListener('click',()=>this.slap('team1'));
+		document.getElementById('slap_btn_2').addEventListener('click',()=>this.slap('team2'));
 
 		setInterval(() => {
 			
 			this.ajaxFetch('tally_slaps').then(object=>{
 				
 				console.log(object);
-				this._xmlcounter1 = object['slap1'];
-				this._xmlcounter2 = object['slap2'];
+				this._xmlCount1 = object['team1'];
+				this._xmlCount2 = object['team2'];
 			});
 			
-			this.counter1 = 0;
-			this.counter2 = 0;
+			this.slapCount1 = 0;
+			this.slapCount2 = 0;
 		}, 3000);
 	}
 
-	set _xmlcounter1(x){this.xmlcounter1.innerHTML = x;}
-	set _xmlcounter2(x){this.xmlcounter2.innerHTML = x;}
+	set _xmlCount1(x){this.xmlCount1.innerHTML = x;}
+	set _xmlCount2(x){this.xmlCount2.innerHTML = x;}
 
 	slap(vote){
 		
 		const current = new Date();
 
-		if(vote == 'slap1'){
+		if(vote == 'team1'){
 			
 			if(current.getMinutes() == 0){
 				
-				this.counter1 += 2;
+				this.slapCount1 += 2;
 				this.showBonus(vote);
 			}else{
 
-				this.counter1 += 1;
+				this.slapCount1 += 1;
 			}
-		}else if(vote == 'slap2'){
+		}else if(vote == 'team2'){
 	
 			if(	
-			(parseInt(this.xmlcounter2.innerHTML) + 1) % 666 == 0 ||
+			(parseInt(this.xmlCount2.innerHTML) + 1) % 666 == 0 ||
 			this.slap2bonus
 			){
 			
@@ -62,24 +62,24 @@ class SlapCounter{
 
 				if(current.getSeconds() - this.timeDiff.getSeconds() > 6)this.slap2bonus = false;
 
-				this.counter2 += 6;
+				this.slapCount2 += 6;
 				this.showBonus(vote);
 			}else{
-				this.counter2 += 1;
+				this.slapCount2 += 1;
 			}
 		}
 	}
 
 	showBonus(vote){
 	
-		const bonus = document.getElementById(`${vote}-bonus`);
+		const bonus = document.getElementById(`${vote}_bonus`);
 		
 		bonus.style.opacity = 1;
 		
 		setTimeout(()=>{
 			
 			bonus.style.opacity = 0;
-		}, 1000);
+		}, 500);
 	}
 
 	async ajaxFetch(action){
@@ -91,7 +91,7 @@ class SlapCounter{
 	
 				'content-Type': 'application/x-www-form-urlencoded; charset-UTF-8'
 			},
-			body: `action=${action}&nonce=${this.nonce}&slap1=${this.counter1}&slap2=${this.counter2}`
+			body: `action=${action}&nonce=${this.nonce}&team1=${this.slapCount1}&team2=${this.slapCount2}`
 		});
 	
 		const data = (await ajaxReq).json();
@@ -108,8 +108,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	
 	counter.ajaxFetch('return_slaps').then(object=>{
 		
-		counter._xmlcounter1 = object['slap1'];
-		counter._xmlcounter2 = object['slap2'];
+		counter._xmlCount1 = object['team1'];
+		counter._xmlCount2 = object['team2'];
 		console.log(object);
 	});
 })

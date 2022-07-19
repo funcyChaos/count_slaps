@@ -18,19 +18,19 @@ function tally_slaps(){
 	
 	if(get_option('toggle_counting')){
 
-		$counter3 = get_option('slap1', 0)+$_REQUEST['slap1'];
-		$counter4 = get_option('slap2', 0)+$_REQUEST['slap2'];
+		$team1 = get_option('team1', 0)+$_REQUEST['team1'];
+		$team2 = get_option('team2', 0)+$_REQUEST['team2'];
 
-		update_option('slap1', $counter3);
-		update_option('slap2', $counter4);
-		$result['slap1'] = $counter3;
-		$result['slap2'] = $counter4;
+		update_option('team1', $team1);
+		update_option('team2', $team2);
+		$result['team1'] = $team1;
+		$result['team2'] = $team2;
 	}else{
 
-		$result['slap1'] = get_option('slap1', 0);
-		$result['slap2'] = get_option('slap2', 0);
+		$result['team1'] = get_option('team1', 0);
+		$result['team2'] = get_option('team2', 0);
 	}
-		
+	
 	echo json_encode($result);
 	
 	die();
@@ -42,8 +42,8 @@ add_action("wp_ajax_nopriv_tally_slaps", "tally_slaps");
 // I guess get slaps would have made more sense
 function return_slaps(){
 	
-	$return['slap1'] = get_option('slap1', 0);
-	$return['slap2'] = get_option('slap2', 0);
+	$return['team1'] = get_option('team1', 0);
+	$return['team2'] = get_option('team2', 0);
 	
 	echo json_encode($return);
 	
@@ -61,8 +61,8 @@ function reset_slaps(){
 		exit('{"response": "GTFOH!"}');
 	}
 
-	delete_option('slap1');
-	delete_option('slap2');
+	delete_option('team1');
+	delete_option('team2');
 
 	echo '{"result": "success"}';
 
@@ -80,8 +80,8 @@ function toggle_slaps(){
 		exit('{"response": "GTFOH!"}');
 	}
 	
-	$return['slap1'] = get_option('slap1', 0);
-	$return['slap2'] = get_option('slap2', 0);
+	$return['team1'] = get_option('team1', 0);
+	$return['team2'] = get_option('team2', 0);
 	
 	$counting = get_option('toggle_counting', false);
 	update_option('toggle_counting', !$counting);
@@ -118,9 +118,9 @@ function render_slap_menu(){
 	?>
 	<h1>Slap Counter Settings</h1>
 	<h3>Slap 1:</h3>
-	<p id="slap1"><?php echo get_option('slap1', 0);?></p>
+	<p id="team1"><?php echo get_option('team1', 0);?></p>
 	<h3>Slap 2:</h3>
-	<p id="slap2"><?php echo get_option('slap2', 0);?></p>
+	<p id="team2"><?php echo get_option('team2', 0);?></p>
 	<button onclick="adminReset()">Reset Slaps</button>
 	<button onclick="returnSlaps()">Refresh Slaps</button>
 	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>
@@ -138,7 +138,7 @@ function render_slap_menu(){
 function slap_btn_1(){
 	
 	?>
-	<button id="slap1btn" class="slap-button">
+	<button id="slap_btn_1" class="slap-button">
 		SLAP!
 	</button>
 	<?php
@@ -147,7 +147,7 @@ function slap_btn_1(){
 function slap_btn_2(){
 	
 	?>
-	<button id="slap2btn" class="slap-button">
+	<button id="slap_btn_2" class="slap-button">
 		SLAP!
 	</button>
 	<?php
@@ -156,28 +156,28 @@ function slap_btn_2(){
 function slap_counter_1(){
 
 	?>
-	<h1 id="slap1"><?php echo get_option('slap1', 0);?></h1>
+	<h1 id="xml_count_1"><?php echo get_option('team1', 0);?></h1>
 	<?php
 }
 
 function slap_counter_2(){
 
 	?>
-	<h1 id="slap2"><?php echo get_option('slap2', 0);?></h1>
+	<h1 id="xml_count_2"><?php echo get_option('team2', 0);?></h1>
 	<?php
 }
 
 function bonus1(){
 
 	?>
-	<h1 id="slap1-bonus" class="bonus-styles">BONUS!</h1>
+	<h1 id="team1_bonus" class="bonus-styles">BONUS!</h1>
 	<?php
 }
 
 function bonus2(){
 
 	?>
-	<h1 id="slap2-bonus" class="bonus-styles">BONUS!</h1>
+	<h1 id="team2_bonus" class="bonus-styles">BONUS!</h1>
 	<?php
 }
 
