@@ -7,43 +7,48 @@ function returnSlaps(){
 	
 	ajaxFetch('return_slaps').then(object=>{
 		
-		counter1.innerHTML = object['slap1'];
-		counter2.innerHTML = object['slap2'];
+		counter1.innerHTML = object['team1'];
+		counter2.innerHTML = object['team2'];
 		console.log(object);
 	});
 }
 
 function adminReset(){
+
+	const sure = confirm('Are you sure you want to reset all the slaps?');
 	
-	ajaxFetch('reset_slaps', nonce).then(object=>{
-		
-		console.log(object);
-		counter1.innerHTML = '0';
-		counter2.innerHTML = '0';
-	});
+	if(sure){
+
+		ajaxFetch('reset_slaps', nonce).then(object=>{
+			
+			console.log(object);
+			counter1.innerHTML = '0';
+			counter2.innerHTML = '0';
+		});
+	}
 }
 
 function toggleCounting(){
-	
+
 	ajaxFetch('toggle_slaps', nonce).then(object=>{
 		
 		console.log(object);
-		counter1.innerHTML = object['slap1'];
-		counter2.innerHTML = object['slap2'];
+		counter1.innerHTML = object['team1'];
+		counter2.innerHTML = object['team2'];
 		document.getElementById('count-toggle').innerHTML = object['state'] ? 'Stop Counting' : 'Start Counting';
 	})
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
 
-	counter1 = document.getElementById('slap1');
-	counter2 = document.getElementById('slap2');
+	counter1 = document.getElementById('team1');
+	counter2 = document.getElementById('team2');
 	nonce = document.getElementById('nonce-div').getAttribute('data-nonce');
 
 	ajaxFetch('return_slaps').then(object=>{
 		
-		counter1.innerHTML = object['slap1'];
-		counter2.innerHTML = object['slap2'];
+		counter1.innerHTML = object['team1'];
+		counter2.innerHTML = object['team2'];
 		console.log(object);
 	});
 });
