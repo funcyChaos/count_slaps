@@ -11,11 +11,11 @@ A plugin to count slaps for FOTA fights at Chilis
 
 ### Required ID's:
 
-#xml_count_x = ID to show/adjust teamx's count
+#xml_count_x 	= ID to show/adjust teamx's count
 
-#teamx_bonus = ID to show teamx's bonus
+#teamx_bonus 	= ID to show teamx's bonus
 
-#slap_btn_1 = ID that will add slaps when clicked
+#slap_btn_1 	= ID that will add slaps when clicked
 
 ### Classes:
 
