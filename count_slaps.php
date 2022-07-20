@@ -136,6 +136,12 @@ function render_slap_menu(){
 
 // Count Slaps Shortcodes!
 
+/*
+ * dev_render
+ * General Counter Layout
+ * You can use these ID's on any respective element you want.
+ */
+
 function dev_render(){
 
 	?>
