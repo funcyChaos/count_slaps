@@ -156,14 +156,16 @@ function slap_btn_2(){
 function slap_counter_1(){
 
 	?>
-	<h1 id="xml_count_1"><?php echo get_option('team1', 0);?></h1>
+	<h1>Slap 1:</h1>
+	<h2 id="xml_count_1"><?php echo get_option('team1', 0);?></h2>
 	<?php
 }
 
 function slap_counter_2(){
 
 	?>
-	<h1 id="xml_count_2"><?php echo get_option('team2', 0);?></h1>
+	<h1>Slap 2:</h1>
+	<h2 id="xml_count_2"><?php echo get_option('team2', 0);?></h2>
 	<?php
 }
 
@@ -197,8 +199,8 @@ add_shortcode('slap_btn_1' , 'slap_btn_1');
 add_shortcode('slap_btn_2' , 'slap_btn_2');
 add_shortcode('slap_counter_1' , 'slap_counter_1');
 add_shortcode('slap_counter_2' , 'slap_counter_2');
-add_shortcode('render_bonus1' , 'bonus1');
-add_shortcode('render_bonus2' , 'bonus2');
+add_shortcode('slap_bonus_1' , 'bonus1');
+add_shortcode('slap_bonus_2' , 'bonus2');
 add_shortcode('nonce_div', 'nonce_div');
 	
 
