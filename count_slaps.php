@@ -135,51 +135,25 @@ function render_slap_menu(){
 }
 
 // Count Slaps Shortcodes!
-function slap_btn_1(){
-	
+
+function dev_render(){
+
 	?>
-	<button id="slap_btn_1" class="slap-button">
+		<h1>Slap 1:</h1>
+		<h2 id="xml_count_1"><?php echo get_option('team1', 0);?></h2>
+		<h1 id="team1_bonus" class="bonus-styles">X2 BONUS!</h1>
+		<!-- Some kind of timer? -->
+		<button id="slap_btn_1" class="slap-button">
 		SLAP!
-	</button>
-	<?php
-}
-
-function slap_btn_2(){
-	
-	?>
-	<button id="slap_btn_2" class="slap-button">
+		</button>
+		
+		<h1>Slap 2:</h1>
+		<h2 id="xml_count_2"><?php echo get_option('team2', 0);?></h2>
+		<h1 id="team2_bonus" class="bonus-styles">X6 BONUS!</h1>
+		<!-- Some kind of timer? -->
+		<button id="slap_btn_2" class="slap-button">
 		SLAP!
-	</button>
-	<?php
-}
-
-function slap_counter_1(){
-
-	?>
-	<h1>Slap 1:</h1>
-	<h2 id="xml_count_1"><?php echo get_option('team1', 0);?></h2>
-	<?php
-}
-
-function slap_counter_2(){
-
-	?>
-	<h1>Slap 2:</h1>
-	<h2 id="xml_count_2"><?php echo get_option('team2', 0);?></h2>
-	<?php
-}
-
-function bonus1(){
-
-	?>
-	<h1 id="team1_bonus" class="bonus-styles">BONUS!</h1>
-	<?php
-}
-
-function bonus2(){
-
-	?>
-	<h1 id="team2_bonus" class="bonus-styles">BONUS!</h1>
+		</button>
 	<?php
 }
 
@@ -195,12 +169,7 @@ function nonce_div(){
 	<?php
 }
 
-add_shortcode('slap_btn_1' , 'slap_btn_1');
-add_shortcode('slap_btn_2' , 'slap_btn_2');
-add_shortcode('slap_counter_1' , 'slap_counter_1');
-add_shortcode('slap_counter_2' , 'slap_counter_2');
-add_shortcode('slap_bonus_1' , 'bonus1');
-add_shortcode('slap_bonus_2' , 'bonus2');
+add_shortcode('dev_render' , 'dev_render');
 add_shortcode('nonce_div', 'nonce_div');
 	
 
