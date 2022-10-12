@@ -25,14 +25,14 @@ class SlapCounter{
 		}, 3000);
 	}
 
-	set _xmlCount1(x){this.xmlCount1.innerHTML = x;}
-	set _xmlCount2(x){this.xmlCount2.innerHTML = x;}
+	set _xmlCount1(x){this.xmlCount1.innerText = x;}
+	set _xmlCount2(x){this.xmlCount2.innerText = x;}
 
 	slap(vote){
 		const current = new Date();
 
 		if(vote == 'team1'){
-			if((parseInt(this.xmlCount1.innerHTML) + 1) % 666 == 0 || this.slap1bonus){
+			if((parseInt(this.xmlCount1.innerText) + 1) % 666 == 0 || this.slap1bonus){
 				if(!this.slap1bonus){
 					this.timeDiff1 = new Date();
 					this.slap1bonus = true;
@@ -46,7 +46,7 @@ class SlapCounter{
 				this.slapCount1 += 1;
 			}
 		}else if(vote == 'team2'){
-			if((parseInt(this.xmlCount2.innerHTML) + 1) % 666 == 0 || this.slap2bonus){
+			if((parseInt(this.xmlCount2.innerText) + 1) % 666 == 0 || this.slap2bonus){
 				if(!this.slap2bonus){
 					this.timeDiff2 = new Date();
 					this.slap2bonus = true;
