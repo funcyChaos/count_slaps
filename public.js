@@ -10,8 +10,10 @@ class SlapCounter{
 		this.xmlCount1 = document.getElementById('xml_count_1');
 		this.xmlCount2 = document.getElementById('xml_count_2');
 
-		this.timeDiff = false;
+		this.slap1bonus	= false
+		this.timeDiff1 	= false;
 		this.slap2bonus = false;
+		this.timeDiff2 	= false;
 
 		document.getElementById('slap_btn_1').addEventListener('click',()=>this.slap('team1'));
 		document.getElementById('slap_btn_2').addEventListener('click',()=>this.slap('team2'));
@@ -39,12 +41,21 @@ class SlapCounter{
 
 		if(vote == 'team1'){
 			
-			if(current.getMinutes() == 0){
-				
-				this.slapCount1 += 2;
+			if(	
+			(parseInt(this.xmlCount1.innerHTML) + 1) % 666 == 0 ||
+			this.slap1bonus
+			){
+				if(!this.slap1bonus){
+
+					this.timeDiff1 = new Date();
+					this.slap1bonus = true;
+				}else{
+					if(current.getSeconds() - this.timeDiff1.getSeconds() > 6)this.slap1bonus = false;
+				}
+
+				this.slapCount1 += 6;
 				this.showBonus(vote);
 			}else{
-
 				this.slapCount1 += 1;
 			}
 		}else if(vote == 'team2'){
@@ -56,11 +67,11 @@ class SlapCounter{
 			
 				if(!this.slap2bonus){
 
-					this.timeDiff = new Date();
+					this.timeDiff2 = new Date();
 					this.slap2bonus = true;
+				}else{
+					if(current.getSeconds() - this.timeDiff2.getSeconds() > 6)this.slap2bonus = false;
 				}
-
-				if(current.getSeconds() - this.timeDiff.getSeconds() > 6)this.slap2bonus = false;
 
 				this.slapCount2 += 6;
 				this.showBonus(vote);
