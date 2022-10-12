@@ -82,7 +82,6 @@ add_action('wp_ajax_nopriv_toggle_slaps', function(){die();});
 // Register admin slap menu
 function slap_menu(){
 	add_menu_page(
-
 		'Slap Menu',
 		'Slap Menu',
 		'edit_posts',
@@ -102,7 +101,7 @@ function render_slap_menu(){
 	<p id="team2"><?php echo get_option('team2', 0);?></p>
 	<button onclick="adminReset()">Reset Slaps</button>
 	<button onclick="returnSlaps()">Refresh Slaps</button>
-	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting', 'Stop Counting') ? 'Stop Counting' : 'Start Counting';?></button>
+	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting') ? 'Stop Counting' : 'Start Counting';?></button>
 	<?php
 	$nonce = wp_create_nonce('fota_secret_password');
 	?>
