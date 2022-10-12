@@ -13,7 +13,7 @@ class SlapCounter{
 		document.getElementById('slap_btn_1').addEventListener('click',()=>this.slap('team1'));
 		document.getElementById('slap_btn_2').addEventListener('click',()=>this.slap('team2'));
 
-		setInterval(() => {
+		const refresh = setInterval(() => {
 			this.ajaxFetch('tally_slaps').then(object=>{
 				console.log(object);
 				this._xmlCount1 = object['team1'];
@@ -25,8 +25,8 @@ class SlapCounter{
 		}, 3000);
 	}
 
-	set _xmlCount1(x){this.xmlCount1.innerText = x;}
-	set _xmlCount2(x){this.xmlCount2.innerText = x;}
+	set _xmlCount1(x){this.xmlCount1.children[0].children[0].innerText = x;}
+	set _xmlCount2(x){this.xmlCount2.children[0].children[0].innerText = x;}
 
 	slap(vote){
 		const current = new Date();
