@@ -26,8 +26,6 @@ class SlapCounter{
 	set _xmlCount2(x){this.xmlCount2.innerText = x;}
 
 	slap(vote){
-		const current = new Date();
-
 		if(vote == 'team1'){
 			if((parseInt(this.xmlCount1.innerText) + 1) % 666 == 0 || this.slap1bonus){
 				if(!this.slap1bonus){
@@ -37,7 +35,7 @@ class SlapCounter{
 					}, 60000);
 				}else{
 					this.slapCount1 += 6;
-					this.showBonus(vote);
+					// this.showBonus(vote);
 				}
 			}else{
 				this.slapCount1 += 1;
@@ -52,7 +50,7 @@ class SlapCounter{
 					}, 60000);
 				}else{
 					this.slapCount2 += 6;
-					this.showBonus(vote);
+					// this.showBonus(vote);
 				}
 
 			}else{
