@@ -7,9 +7,7 @@ class SlapCounter{
 		this.slapCount1	= 0;
 		this.slapCount2	= 0;
 		this.slap1bonus	= false
-		this.timeDiff1 	= false;
 		this.slap2bonus = false;
-		this.timeDiff2 	= false;
 
 		this.tallying		= false;
 
@@ -22,17 +20,6 @@ class SlapCounter{
 			this.slap('team2');
 			this.tallySlaps();
 		});
-
-		// const refresh = setInterval(() => {
-		// 	this.ajaxFetch('tally_slaps').then(object=>{
-		// 		console.log(object);
-		// 		this._xmlCount1 = object['team1'];
-		// 		this._xmlCount2 = object['team2'];
-		// 	});
-			
-		// 	this.slapCount1 = 0;
-		// 	this.slapCount2 = 0;
-		// }, 3000);
 	}
 
 	set _xmlCount1(x){this.xmlCount1.innerText = x;}
@@ -44,14 +31,14 @@ class SlapCounter{
 		if(vote == 'team1'){
 			if((parseInt(this.xmlCount1.innerText) + 1) % 666 == 0 || this.slap1bonus){
 				if(!this.slap1bonus){
-					this.timeDiff1 = new Date();
 					this.slap1bonus = true;
+					setTimeout(() => {
+						this.slap1bonus = false;
+					}, 60000);
 				}else{
-					if(current.getSeconds() - this.timeDiff1.getSeconds() > 6)this.slap1bonus = false;
+					this.slapCount1 += 6;
+					this.showBonus(vote);
 				}
-
-				this.slapCount1 += 6;
-				this.showBonus(vote);
 			}else{
 				this.slapCount1 += 1;
 			}
@@ -59,14 +46,15 @@ class SlapCounter{
 		}else if(vote == 'team2'){
 			if((parseInt(this.xmlCount2.innerText) + 1) % 666 == 0 || this.slap2bonus){
 				if(!this.slap2bonus){
-					this.timeDiff2 = new Date();
 					this.slap2bonus = true;
+					setTimeout(() => {
+						this.slap2bonus = false;
+					}, 60000);
 				}else{
-					if(current.getSeconds() - this.timeDiff2.getSeconds() > 6)this.slap2bonus = false;
+					this.slapCount2 += 6;
+					this.showBonus(vote);
 				}
 
-				this.slapCount2 += 6;
-				this.showBonus(vote);
 			}else{
 				this.slapCount2 += 1;
 			}
