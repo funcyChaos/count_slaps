@@ -3,8 +3,8 @@ class SlapCounter{
 		this.nonce			= document.getElementById('nonce-div').getAttribute('data-nonce');
 		this.slapCount1	= 0;
 		this.slapCount2	= 0;
-		this.xmlCount1	= document.getElementById('xml_count_1');
-		this.xmlCount2	= document.getElementById('xml_count_2');
+		this.xmlCount1	= document.getElementById('xml_count_1').children[0].children[0];
+		this.xmlCount2	= document.getElementById('xml_count_2').children[0].children[0];
 		this.slap1bonus	= false
 		this.timeDiff1 	= false;
 		this.slap2bonus = false;
@@ -25,8 +25,8 @@ class SlapCounter{
 		}, 3000);
 	}
 
-	set _xmlCount1(x){this.xmlCount1.children[0].children[0].innerText = x;}
-	set _xmlCount2(x){this.xmlCount2.children[0].children[0].innerText = x;}
+	set _xmlCount1(x){this.xmlCount1.innerText = x;}
+	set _xmlCount2(x){this.xmlCount2.innerText = x;}
 
 	slap(vote){
 		const current = new Date();

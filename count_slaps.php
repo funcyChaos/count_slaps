@@ -124,7 +124,13 @@ add_action('admin_menu', 'slap_menu');
 function dev_render(){
 	?>
 		<h1>Slap 1:</h1>
-		<h2 id="xml_count_1"><?php echo get_option('team1', 0);?></h2>
+		<div id="xml_count_1">
+			<div>
+				<h2>
+					<?php echo get_option('team1', 0);?>
+				</h2>
+			</div>
+		</div>
 		<h1 id="team1_bonus" class="bonus-styles">X6 BONUS!</h1>
 		<!-- Some kind of timer? -->
 		<button id="slap_btn_1" class="slap-button">
@@ -132,7 +138,13 @@ function dev_render(){
 		</button>
 		
 		<h1>Slap 2:</h1>
-		<h2 id="xml_count_2"><?php echo get_option('team2', 0);?></h2>
+		<div id="xml_count_2">
+			<div>
+				<h2>
+					<?php echo get_option('team2', 0);?>
+				</h2>
+			</div>
+		</div>
 		<h1 id="team2_bonus" class="bonus-styles">X6 BONUS!</h1>
 		<!-- Some kind of timer? -->
 		<button id="slap_btn_2" class="slap-button">
@@ -157,7 +169,7 @@ function public_script(){
 	wp_register_script('count_slaps_public', plugin_dir_url(__FILE__).'	public.js');
 	wp_localize_script('count_slaps_public', 'ajax', array('ajaxurl' => admin_url('admin-ajax.php'))
 	);
-	wp_enqueue_script('count_slaps_public');
+	wp_enqueue_script('count_slaps_public','',array(),false,true);
 }
 add_action('wp_enqueue_scripts', 'public_script');
 
