@@ -55,6 +55,7 @@ class SlapCounter{
 			}else{
 				this.slapCount1 += 1;
 			}
+			console.log(this.slapCount1);
 		}else if(vote == 'team2'){
 			if((parseInt(this.xmlCount2.innerText) + 1) % 666 == 0 || this.slap2bonus){
 				if(!this.slap2bonus){
@@ -69,6 +70,7 @@ class SlapCounter{
 			}else{
 				this.slapCount2 += 1;
 			}
+			console.log(this.slapCount2);
 		}
 	}
 
@@ -90,11 +92,10 @@ class SlapCounter{
 					console.log(object);
 					this._xmlCount1 = object['team1'];
 					this._xmlCount2 = object['team2'];
+					this.slapCount1 = 0;
+					this.slapCount2 = 0;
+					this.tallying		= false;
 				});
-				
-				this.slapCount1 = 0;
-				this.slapCount2 = 0;
-				this.tallying		= false;
 			}, 5000);
 		}else{
 			return
