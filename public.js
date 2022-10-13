@@ -1,28 +1,38 @@
 class SlapCounter{
 	constructor(){
 		this.nonce			= document.getElementById('nonce-div').getAttribute('data-nonce');
-		this.slapCount1	= 0;
-		this.slapCount2	= 0;
 		this.xmlCount1	= document.getElementById('xml_count_1').children[0].children[0];
 		this.xmlCount2	= document.getElementById('xml_count_2').children[0].children[0];
+		
+		this.slapCount1	= 0;
+		this.slapCount2	= 0;
 		this.slap1bonus	= false
 		this.timeDiff1 	= false;
 		this.slap2bonus = false;
 		this.timeDiff2 	= false;
 
-		document.getElementById('slap_btn_1').addEventListener('click',()=>this.slap('team1'));
-		document.getElementById('slap_btn_2').addEventListener('click',()=>this.slap('team2'));
+		this.tallying		= false;
 
-		const refresh = setInterval(() => {
-			this.ajaxFetch('tally_slaps').then(object=>{
-				console.log(object);
-				this._xmlCount1 = object['team1'];
-				this._xmlCount2 = object['team2'];
-			});
+		document.getElementById('slap_btn_1').addEventListener('click',()=>{
+			this.slap('team1');
+			this.tallySlaps();
+		});
+
+		document.getElementById('slap_btn_2').addEventListener('click',()=>{
+			this.slap('team2');
+			this.tallySlaps();
+		});
+
+		// const refresh = setInterval(() => {
+		// 	this.ajaxFetch('tally_slaps').then(object=>{
+		// 		console.log(object);
+		// 		this._xmlCount1 = object['team1'];
+		// 		this._xmlCount2 = object['team2'];
+		// 	});
 			
-			this.slapCount1 = 0;
-			this.slapCount2 = 0;
-		}, 3000);
+		// 	this.slapCount1 = 0;
+		// 	this.slapCount2 = 0;
+		// }, 3000);
 	}
 
 	set _xmlCount1(x){this.xmlCount1.innerText = x;}
@@ -70,6 +80,25 @@ class SlapCounter{
 		setTimeout(()=>{
 			bonus.style.opacity = 0;
 		}, 500);
+	}
+
+	tallySlaps(){
+		if(!this.tallying){
+			this.tallying	= true;
+			setTimeout(() => {
+				this.ajaxFetch('tally_slaps').then(object=>{
+					console.log(object);
+					this._xmlCount1 = object['team1'];
+					this._xmlCount2 = object['team2'];
+				});
+				
+				this.slapCount1 = 0;
+				this.slapCount2 = 0;
+				this.tallying		= false;
+			}, 5000);
+		}else{
+			return
+		}
 	}
 
 	async ajaxFetch(action){
