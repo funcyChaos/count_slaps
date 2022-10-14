@@ -1,3 +1,7 @@
+setTimeout(() => {
+	window.location.replace("https://meetmeinthechilisparkinglot.com/#top");
+}, 300000);
+
 class SlapCounter{
 	constructor(){
 		this.nonce			= document.getElementById('nonce-div').getAttribute('data-nonce');
