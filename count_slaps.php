@@ -58,15 +58,19 @@ add_action('rest_api_init', function(){
 		array(
 			'methods'	=> 'POST',
 			'callback'	=> function ($req){
-				$body			= $req->get_json_params();
+				$body = $req->get_json_params();
 				global $wpdb;
-				$current	= $wpdb->get_results(
+				$current = $wpdb->get_results(
 					'SELECT count FROM wp_count_slaps WHERE id = 1
 				', ARRAY_N);
-				$res['team1']			= $current[0][0] + $body['team1'];
+				$res['team1'] = $current[0][0] + $body['team1'];
 				$wpdb->query(
 					'UPDATE wp_count_slaps
-					SET count = ' . $res['team1'] . ' WHERE id = 1
+					SET count = CASE id 
+					WHEN 1 THEN 1
+					WHEN 2 THEN 5
+					ELSE 3 END
+					WHERE id IN(1, 2)
 				');
 				return json_encode($res);
 			}
@@ -79,9 +83,9 @@ register_activation_hook(__FILE__, function(){
 	$charset_collate	= $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}count_slaps` (
-		id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		id int,
 		count	int
-	) $charset_collate; INSERT INTO `{$wpdb->base_prefix}count_slaps` (count) VALUES (0)";
+	) $charset_collate; INSERT INTO `{$wpdb->base_prefix}count_slaps` (id, count) VALUES (1,0),(2,0)";
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta($sql);
