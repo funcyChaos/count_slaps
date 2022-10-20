@@ -37,9 +37,7 @@ add_action("wp_ajax_nopriv_tally_slaps", "tally_slaps");
 function return_slaps(){
 	$return['team1'] = get_option('team1', 0);
 	$return['team2'] = get_option('team2', 0);
-	
-	echo json_encode($return);
-	
+	echo json_encode($return);	
 	die();
 }
 add_action("wp_ajax_return_slaps", "return_slaps");	
@@ -59,12 +57,31 @@ add_action('rest_api_init', function(){
 		),
 		array(
 			'methods'	=> 'POST',
-			'callback'	=> function ($request){
-				$result['hello'] = 'hellooo';
-				return json_encode($result);
+			'callback'	=> function ($req){
+				global $wpdb;
+				// $wpdb->query('UPDATE wp_count_slaps SET count = 3 WHERE id = 1');
+
+				$res['db']	= $wpdb->get_results('SELECT count FROM wp_count_slaps WHERE id = 1');
+				$res['request'] = $req->get_body();
+				return json_encode($res);
 			}
 		)
 	));
+});
+
+register_activation_hook(__FILE__, function(){
+	global $wpdb;
+	$charset_collate	= $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}count_slaps` (
+		id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		count	int
+	) $charset_collate; INSERT INTO `{$wpdb->base_prefix}count_slaps` (count) VALUES (0)";
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta($sql);
+
+	$res['error']		= empty($wpdb->last_error);
 });
 
 
