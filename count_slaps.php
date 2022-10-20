@@ -26,8 +26,8 @@ function tally_slaps(){
 		$result['team1'] = get_option('team1', 0);
 		$result['team2'] = get_option('team2', 0);
 	}
-	
-	echo json_encode($result);	
+	// $result[]	= wp_verify_nonce($_REQUEST['nonce'], 'count_slaps_nonce');
+	echo json_encode($result);
 	die();
 }
 add_action("wp_ajax_tally_slaps", "tally_slaps");	
@@ -48,21 +48,26 @@ add_action('rest_api_init', function(){
 	register_rest_route('count-slaps', '/tally-slaps', array(
 		array(
 			'methods'	=> 'GET',
-			'callback'	=> function ($request){
+			'callback'	=> function ($req){
 				$result['team1'] = get_option('team1', 0);
 				$result['team2'] = get_option('team2', 0);
-				$result['request'] = $request['id'];
+				$result['request'] = $req['id'];
 				return json_encode($result);
 			}
 		),
 		array(
 			'methods'	=> 'POST',
 			'callback'	=> function ($req){
+				$body			= $req->get_json_params();
 				global $wpdb;
-				// $wpdb->query('UPDATE wp_count_slaps SET count = 3 WHERE id = 1');
-
-				$res['db']	= $wpdb->get_results('SELECT count FROM wp_count_slaps WHERE id = 1');
-				$res['request'] = $req->get_body();
+				$current	= $wpdb->get_results(
+					'SELECT count FROM wp_count_slaps WHERE id = 1
+				', ARRAY_N);
+				$res['team1']			= $current[0][0] + $body['team1'];
+				$wpdb->query(
+					'UPDATE wp_count_slaps
+					SET count = ' . $res['team1'] . ' WHERE id = 1
+				');
 				return json_encode($res);
 			}
 		)

@@ -37,7 +37,13 @@ class SlapCounter{
 	debug(){
 		fetch('http://localhost:10013/wp-json/count-slaps/tally-slaps', {
 			method: "POST",
-			body: "slaps=over9000"
+			headers: {
+				'content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				team1:	2,
+				team2:	3
+			})
 		}).then(res=>res.json()).then(obj=>console.log(obj));
 	}
 
