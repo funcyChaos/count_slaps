@@ -45,6 +45,29 @@ function return_slaps(){
 add_action("wp_ajax_return_slaps", "return_slaps");	
 add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
+
+add_action('rest_api_init', function(){
+	register_rest_route('count-slaps', '/tally-slaps', array(
+		array(
+			'methods'	=> 'GET',
+			'callback'	=> function ($request){
+				$result['team1'] = get_option('team1', 0);
+				$result['team2'] = get_option('team2', 0);
+				$result['request'] = $request['id'];
+				return json_encode($result);
+			}
+		),
+		array(
+			'methods'	=> 'POST',
+			'callback'	=> function ($request){
+				$result['hello'] = 'hellooo';
+				return json_encode($result);
+			}
+		)
+	));
+});
+
+
 // Set all slaps back to 0
 function reset_slaps(){
 	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){

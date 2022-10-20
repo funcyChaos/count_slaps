@@ -1,6 +1,6 @@
-setTimeout(() => {
-	window.location.replace("https://meetmeinthechilisparkinglot.com/#top");
-}, 300000);
+// setTimeout(() => {
+// 	window.location.replace("https://meetmeinthechilisparkinglot.com/#top");
+// }, 300000);
 
 class SlapCounter{
 	constructor(){
@@ -24,10 +24,34 @@ class SlapCounter{
 			this.slap('team2');
 			this.tallySlaps();
 		});
+
+		// for (let index = 0; index <= 200; index++) {
+		// 	this.debug(index);
+		// }
+
+		fetch('http://localhost:10013/wp-json/count-slaps/tally-slaps', {
+			method: "POST"
+		}).then(res=>res.json()).then(obj=>console.log(obj));
 	}
 
 	set _xmlCount1(x){this.xmlCount1.innerText = x;}
 	set _xmlCount2(x){this.xmlCount2.innerText = x;}
+
+	debug(index){
+		setTimeout(()=>{
+			fetch(ajax.ajaxurl, {
+				method: "POST",
+				headers: {
+					'content-Type': 'application/x-www-form-urlencoded; charset-UTF-8',
+					'iteration': index
+				},
+				body: `action=tally_slaps&nonce=${this.nonce}&team1=1&team2=1`
+			}).then(res=>res.json()).then(obj=>{
+				console.log(obj)
+				console.log(index);
+			});
+		}, 100 * index)
+	}
 
 	slap(vote){
 		if(vote == 'team1'){
@@ -110,9 +134,9 @@ class SlapCounter{
 document.addEventListener('DOMContentLoaded', ()=>{
 	let counter = new SlapCounter();
 	
-	counter.ajaxFetch('return_slaps').then(object=>{
-		counter._xmlCount1 = object['team1'];
-		counter._xmlCount2 = object['team2'];
-		console.log(object);
-	});
+	// counter.ajaxFetch('return_slaps').then(object=>{
+	// 	counter._xmlCount1 = object['team1'];
+	// 	counter._xmlCount2 = object['team2'];
+	// 	console.log(object);
+	// });
 })
