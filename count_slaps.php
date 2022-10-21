@@ -60,20 +60,22 @@ add_action('rest_api_init', function(){
 			'callback'	=> function ($req){
 				$body = $req->get_json_params();
 				global $wpdb;
+				$wpdb->query('BEGIN');
 				$current = $wpdb->get_results(
-					'SELECT count FROM wp_count_slaps WHERE id in (1,2)
+					'SELECT count FROM wp_count_slaps WHERE id in (1,2) FOR UPDATE
 				', ARRAY_N);
 				$res['team1'] = $current[0][0] + $body['team1'];
 				$res['team2'] = $current[1][0] + $body['team2'];
 				$query = $wpdb->prepare(
 				'UPDATE wp_count_slaps
-				SET count = CASE id 
+				SET count = CASE id
 				WHEN 1 THEN %d
 				WHEN 2 THEN %d
 				ELSE 3 END
 				WHERE id IN(1, 2)
 			', $res['team1'], $res['team2']);
 				$wpdb->query($query);
+				$wpdb->query('COMMIT');
 				return json_encode($res);
 			}
 		)

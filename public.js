@@ -26,27 +26,27 @@ class SlapCounter{
 			this.tallySlaps();
 		});
 
-		// for (let index = 0; index <= 200; index++) {
-		// 	this.debug(index);
-		// }
-
-		// console.log(url)
+		for (let index = 0; index <= 200; index++) {
+			this.debug(index);
+		}
 	}
 
 	set _xmlCount1(x){this.xmlCount1.innerText = x;}
 	set _xmlCount2(x){this.xmlCount2.innerText = x;}
 
-	debug(){
-		fetch(`${url}/wp-json/count-slaps/tally-slaps`, {
-			method: "POST",
-			headers: {
-				'content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				team1:	2,
-				team2:	3
-			})
-		}).then(res=>res.json()).then(obj=>console.log(obj));
+	debug(index){
+		// setTimeout(() => {
+			fetch(`${url}/wp-json/count-slaps/tally-slaps`, {
+				method: "POST",
+				headers: {
+					'content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					team1:	1,
+					team2:	1
+				})
+			}).then(res=>res.json()).then(obj=>console.log(obj));
+		// }, 250 * index);
 	}
 
 	slap(vote){
