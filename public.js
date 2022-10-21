@@ -66,9 +66,7 @@ class SlapCounter{
 
 	showBonus(vote){
 		const bonus = document.getElementById(`${vote}_bonus`);
-		
 		bonus.style.opacity = 1;
-		
 		setTimeout(()=>{
 			bonus.style.opacity = 0;
 		}, 500);
@@ -80,7 +78,6 @@ class SlapCounter{
 			setTimeout(() => {
 				this.apiFetch('POST').then(object=>{
 					console.log(object);
-					console.log(object['team1'])
 					this._xmlCount1 = object['team1'];
 					this._xmlCount2 = object['team2'];
 					this.slapCount1 = 0;

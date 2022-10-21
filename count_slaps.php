@@ -8,9 +8,6 @@
 	Author URI: https://funcychaos.github.io
 */
 
-
-
-
 add_action('rest_api_init', function(){
 	register_rest_route('count-slaps', '/tally-slaps', array(
 		array(
@@ -22,8 +19,7 @@ add_action('rest_api_init', function(){
 				', ARRAY_N);
 				$res['team1'] = $current[0][0];
 				$res['team2'] = $current[1][0];
-				// return json_encode($res);
-				wp_send_json($res);
+				return $res;
 			}
 		),
 		array(
@@ -48,8 +44,8 @@ add_action('rest_api_init', function(){
 					', $res['team1'], $res['team2']);
 					$wpdb->query($query);
 					$wpdb->query('COMMIT');
-					return json_encode($res);
-				}else{return '{response: "Slaps are Closed"}';}
+					return $res;
+				}else{return array('response'=>'Slaps are closed!','team1'=>'idk','team2'=>'idk');}
 			}
 		)
 	));
