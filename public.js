@@ -1,18 +1,16 @@
-// setTimeout(() => {
-// 	window.location.replace("https://meetmeinthechilisparkinglot.com/#top");
-// }, 300000);
+setTimeout(() => {
+	window.location.replace("https://meetmeinthechilisparkinglot.com/#top");
+}, 300000);
 
 class SlapCounter{
 	constructor(){
 		this.nonce			= document.getElementById('nonce-div').getAttribute('data-nonce');
 		this.xmlCount1	= document.getElementById('xml_count_1').children[0].children[0];
 		this.xmlCount2	= document.getElementById('xml_count_2').children[0].children[0];
-		
 		this.slapCount1	= 0;
 		this.slapCount2	= 0;
 		this.slap1bonus	= false
 		this.slap2bonus = false;
-
 		this.tallying		= false;
 
 		document.getElementById('slap_btn_1').addEventListener('click',()=>{
