@@ -29,13 +29,15 @@ class SlapCounter{
 		// for (let index = 0; index <= 200; index++) {
 		// 	this.debug(index);
 		// }
+
+		// console.log(url)
 	}
 
 	set _xmlCount1(x){this.xmlCount1.innerText = x;}
 	set _xmlCount2(x){this.xmlCount2.innerText = x;}
 
 	debug(){
-		fetch('http://localhost:10013/wp-json/count-slaps/tally-slaps', {
+		fetch(`${url}/wp-json/count-slaps/tally-slaps`, {
 			method: "POST",
 			headers: {
 				'content-Type': 'application/json'

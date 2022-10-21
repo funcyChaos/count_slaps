@@ -61,17 +61,19 @@ add_action('rest_api_init', function(){
 				$body = $req->get_json_params();
 				global $wpdb;
 				$current = $wpdb->get_results(
-					'SELECT count FROM wp_count_slaps WHERE id = 1
+					'SELECT count FROM wp_count_slaps WHERE id in (1,2)
 				', ARRAY_N);
 				$res['team1'] = $current[0][0] + $body['team1'];
-				$wpdb->query(
-					'UPDATE wp_count_slaps
-					SET count = CASE id 
-					WHEN 1 THEN 1
-					WHEN 2 THEN 5
-					ELSE 3 END
-					WHERE id IN(1, 2)
-				');
+				$res['team2'] = $current[1][0] + $body['team2'];
+				$query = $wpdb->prepare(
+				'UPDATE wp_count_slaps
+				SET count = CASE id 
+				WHEN 1 THEN %d
+				WHEN 2 THEN %d
+				ELSE 3 END
+				WHERE id IN(1, 2)
+			', $res['team1'], $res['team2']);
+				$wpdb->query($query);
 				return json_encode($res);
 			}
 		)
@@ -207,6 +209,7 @@ function nonce_div(){
 			id="nonce-div"
 			data-nonce="<?php echo wp_create_nonce('count_slaps_nonce');?>"
 		></div>
+		<script>const url = '<?php echo get_site_url();?>'</script>
 	<?php
 }
 add_shortcode('dev_render' , 'dev_render');
