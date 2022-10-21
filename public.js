@@ -16,38 +16,18 @@ class SlapCounter{
 		this.tallying		= false;
 
 		document.getElementById('slap_btn_1').addEventListener('click',()=>{
-			// this.slap('team1');
-			// this.tallySlaps();
-			this.debug();
+			this.slap('team1');
+			this.tallySlaps();
 		});
 
 		document.getElementById('slap_btn_2').addEventListener('click',()=>{
 			this.slap('team2');
 			this.tallySlaps();
 		});
-
-		for (let index = 0; index <= 200; index++) {
-			this.debug(index);
-		}
 	}
 
 	set _xmlCount1(x){this.xmlCount1.innerText = x;}
 	set _xmlCount2(x){this.xmlCount2.innerText = x;}
-
-	debug(index){
-		// setTimeout(() => {
-			fetch(`${url}/wp-json/count-slaps/tally-slaps`, {
-				method: "POST",
-				headers: {
-					'content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					team1:	1,
-					team2:	1
-				})
-			}).then(res=>res.json()).then(obj=>console.log(obj));
-		// }, 250 * index);
-	}
 
 	slap(vote){
 		if(vote == 'team1'){
@@ -98,8 +78,9 @@ class SlapCounter{
 		if(!this.tallying){
 			this.tallying	= true;
 			setTimeout(() => {
-				this.ajaxFetch('tally_slaps').then(object=>{
+				this.apiFetch('POST').then(object=>{
 					console.log(object);
+					console.log(object['team1'])
 					this._xmlCount1 = object['team1'];
 					this._xmlCount2 = object['team2'];
 					this.slapCount1 = 0;
@@ -112,16 +93,24 @@ class SlapCounter{
 		}
 	}
 
-	async ajaxFetch(action){
-		const ajaxReq = fetch(ajax.ajaxurl, {
-			method: "POST",
-			headers: {
-				'content-Type': 'application/x-www-form-urlencoded; charset-UTF-8'
-			},
-			body: `action=${action}&nonce=${this.nonce}&team1=${this.slapCount1}&team2=${this.slapCount2}`
-		});
-	
-		const  data		= (await ajaxReq).json();
+	async apiFetch(method){
+		let opts;
+
+		if(method == 'POST'){
+			opts = {
+				method,
+				headers: {
+					'content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					team1:	this.slapCount1,
+					team2:	this.slapCount2
+				})
+			}
+		}
+
+		const req = fetch(`${url}/wp-json/count-slaps/tally-slaps`, opts);
+		const  data		= (await req).json();
 		const	 object	= await data;
 		return object;
 	}
@@ -130,9 +119,9 @@ class SlapCounter{
 document.addEventListener('DOMContentLoaded', ()=>{
 	let counter = new SlapCounter();
 	
-	// counter.ajaxFetch('return_slaps').then(object=>{
-	// 	counter._xmlCount1 = object['team1'];
-	// 	counter._xmlCount2 = object['team2'];
-	// 	console.log(object);
-	// });
+	counter.apiFetch('GET').then(object=>{
+		counter._xmlCount1 = object['team1'];
+		counter._xmlCount2 = object['team2'];
+		console.log(object);
+	});
 })

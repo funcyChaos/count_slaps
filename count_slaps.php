@@ -8,75 +8,48 @@
 	Author URI: https://funcychaos.github.io
 */
 
-// Slap a team!
-function tally_slaps(){
-	if(!wp_verify_nonce($_REQUEST['nonce'], 'count_slaps_nonce')){
-		exit('{"response": "GTFOH!"}');
-	}
-	
-	if(get_option('toggle_counting')){
-		$team1 = get_option('team1', 0)+$_REQUEST['team1'];
-		$team2 = get_option('team2', 0)+$_REQUEST['team2'];
 
-		update_option('team1', $team1);
-		update_option('team2', $team2);
-		$result['team1'] = $team1;
-		$result['team2'] = $team2;
-	}else{
-		$result['team1'] = get_option('team1', 0);
-		$result['team2'] = get_option('team2', 0);
-	}
-	// $result[]	= wp_verify_nonce($_REQUEST['nonce'], 'count_slaps_nonce');
-	echo json_encode($result);
-	die();
-}
-add_action("wp_ajax_tally_slaps", "tally_slaps");	
-add_action("wp_ajax_nopriv_tally_slaps", "tally_slaps");
-
-// I guess get slaps would have made more sense
-function return_slaps(){
-	$return['team1'] = get_option('team1', 0);
-	$return['team2'] = get_option('team2', 0);
-	echo json_encode($return);	
-	die();
-}
-add_action("wp_ajax_return_slaps", "return_slaps");	
-add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
 
 add_action('rest_api_init', function(){
 	register_rest_route('count-slaps', '/tally-slaps', array(
 		array(
 			'methods'	=> 'GET',
-			'callback'	=> function ($req){
-				$result['team1'] = get_option('team1', 0);
-				$result['team2'] = get_option('team2', 0);
-				$result['request'] = $req['id'];
-				return json_encode($result);
+			'callback'	=> function (){
+				global $wpdb;
+				$current = $wpdb->get_results(
+					'SELECT count FROM wp_count_slaps WHERE id in (1,2)
+				', ARRAY_N);
+				$res['team1'] = $current[0][0];
+				$res['team2'] = $current[1][0];
+				// return json_encode($res);
+				wp_send_json($res);
 			}
 		),
 		array(
 			'methods'	=> 'POST',
 			'callback'	=> function ($req){
-				$body = $req->get_json_params();
-				global $wpdb;
-				$wpdb->query('BEGIN');
-				$current = $wpdb->get_results(
-					'SELECT count FROM wp_count_slaps WHERE id in (1,2) FOR UPDATE
-				', ARRAY_N);
-				$res['team1'] = $current[0][0] + $body['team1'];
-				$res['team2'] = $current[1][0] + $body['team2'];
-				$query = $wpdb->prepare(
-				'UPDATE wp_count_slaps
-				SET count = CASE id
-				WHEN 1 THEN %d
-				WHEN 2 THEN %d
-				ELSE 3 END
-				WHERE id IN(1, 2)
-			', $res['team1'], $res['team2']);
-				$wpdb->query($query);
-				$wpdb->query('COMMIT');
-				return json_encode($res);
+				if(get_option('toggle_counting')){
+					$body = $req->get_json_params();
+					global $wpdb;
+					$wpdb->query('BEGIN');
+					$current = $wpdb->get_results(
+						'SELECT count FROM wp_count_slaps WHERE id in (1,2) FOR UPDATE
+					', ARRAY_N);
+					$res['team1'] = $current[0][0] + $body['team1'];
+					$res['team2'] = $current[1][0] + $body['team2'];
+					$query = $wpdb->prepare(
+						'UPDATE wp_count_slaps
+						SET count = CASE id
+						WHEN 1 THEN %d
+						WHEN 2 THEN %d
+						ELSE 3 END
+						WHERE id IN(1, 2)
+					', $res['team1'], $res['team2']);
+					$wpdb->query($query);
+					$wpdb->query('COMMIT');
+					return json_encode($res);
+				}else{return '{response: "Slaps are Closed"}';}
 			}
 		)
 	));
@@ -85,18 +58,42 @@ add_action('rest_api_init', function(){
 register_activation_hook(__FILE__, function(){
 	global $wpdb;
 	$charset_collate	= $wpdb->get_charset_collate();
-
 	$sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}count_slaps` (
 		id int,
 		count	int
 	) $charset_collate; INSERT INTO `{$wpdb->base_prefix}count_slaps` (id, count) VALUES (1,0),(2,0)";
-
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta($sql);
-
 	$res['error']		= empty($wpdb->last_error);
 });
 
+function return_slaps(){
+	global $wpdb;
+	$current = $wpdb->get_results(
+		'SELECT count FROM wp_count_slaps WHERE id in (1,2)
+	', ARRAY_N);
+	$res['team1'] = $current[0][0];
+	$res['team2'] = $current[1][0];
+	echo json_encode($res);	
+	die();
+}
+add_action("wp_ajax_return_slaps", "return_slaps");	
+add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
+
+// Turn slap counting on and off
+function toggle_slaps(){
+	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){
+		exit('{"response": "GTFOH!"}');
+	}
+	// Get Slaps
+	$counting = get_option('toggle_counting', false);
+	update_option('toggle_counting', !$counting);
+	$return['state'] = !$counting;
+	echo json_encode($return);
+	die();
+}
+add_action('wp_ajax_toggle_slaps', 'toggle_slaps');
+add_action('wp_ajax_nopriv_toggle_slaps', function(){die();});
 
 // Set all slaps back to 0
 function reset_slaps(){
@@ -104,33 +101,20 @@ function reset_slaps(){
 		exit('{"response": "GTFOH!"}');
 	}
 
-	delete_option('team1');
-	delete_option('team2');
-
-	echo '{"result": "success"}';
+	global $wpdb;
+	$wpdb->query(
+		'UPDATE wp_count_slaps
+		SET count = 0
+		WHERE id IN(1, 2)
+	');
+	$res['error']	= empty($wpdb->last_error);
+	echo json_encode($res);
 	die();
 }
 add_action('wp_ajax_reset_slaps', 'reset_slaps');
 add_action('wp_ajax_nopriv_reset_slaps', function(){die();});
 
-// Turn slap counting on and off
-function toggle_slaps(){
-	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){
-		exit('{"response": "GTFOH!"}');
-	}
-	
-	$return['team1'] = get_option('team1', 0);
-	$return['team2'] = get_option('team2', 0);
-	
-	$counting = get_option('toggle_counting', false);
-	update_option('toggle_counting', !$counting);
-	$return['state'] = !$counting;
-	
-	echo json_encode($return);
-	die();
-}
-add_action('wp_ajax_toggle_slaps', 'toggle_slaps');
-add_action('wp_ajax_nopriv_toggle_slaps', function(){die();});
+
 
 // Register admin slap menu
 function slap_menu(){
@@ -152,9 +136,9 @@ function render_slap_menu(){
 	<p id="team1"><?php echo get_option('team1', 0);?></p>
 	<h3>Slap 2:</h3>
 	<p id="team2"><?php echo get_option('team2', 0);?></p>
-	<button onclick="adminReset()">Reset Slaps</button>
 	<button onclick="returnSlaps()">Refresh Slaps</button>
 	<button id="count-toggle" onclick="toggleCounting()"><?php echo get_option('toggle_counting') ? 'Stop Counting' : 'Start Counting';?></button>
+	<button onclick="adminReset()">Reset Slaps</button>
 	<?php
 	$nonce = wp_create_nonce('fota_secret_password');
 	?>
