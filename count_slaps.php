@@ -44,6 +44,7 @@ add_action('rest_api_init', function(){
 					", $res['team1'], $res['team2']);
 					$wpdb->query($query);
 					$wpdb->query('COMMIT');
+					$wpdb->query('END');
 					return $res;
 				}else{return array('response'=>'Slaps are closed!','team1'=>'idk','team2'=>'idk');}
 			}
