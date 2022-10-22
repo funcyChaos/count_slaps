@@ -1,5 +1,5 @@
 setTimeout(() => {
-	window.location.replace("https://meetmeinthechilisparkinglot.com/#top");
+	window.location.replace(`${url}/#top"`);
 }, 300000);
 
 class SlapCounter{
@@ -15,12 +15,10 @@ class SlapCounter{
 
 		document.getElementById('slap_btn_1').addEventListener('click',()=>{
 			this.slap('team1');
-			this.tallySlaps();
 		});
 
 		document.getElementById('slap_btn_2').addEventListener('click',()=>{
 			this.slap('team2');
-			this.tallySlaps();
 		});
 	}
 
@@ -58,19 +56,8 @@ class SlapCounter{
 			}else{
 				this.slapCount2 += 1;
 			}
-			console.log(this.slapCount2);
 		}
-	}
-
-	showBonus(vote){
-		const bonus = document.getElementById(`${vote}_bonus`);
-		bonus.style.opacity = 1;
-		setTimeout(()=>{
-			bonus.style.opacity = 0;
-		}, 500);
-	}
-
-	tallySlaps(){
+		
 		if(!this.tallying){
 			this.tallying	= true;
 			setTimeout(() => {
@@ -82,10 +69,16 @@ class SlapCounter{
 					this.slapCount2 = 0;
 					this.tallying		= false;
 				});
-			}, 5000);
-		}else{
-			return
+			}, 800);
 		}
+	}
+
+	showBonus(vote){
+		const bonus = document.getElementById(`${vote}_bonus`);
+		bonus.style.opacity = 1;
+		setTimeout(()=>{
+			bonus.style.opacity = 0;
+		}, 500);
 	}
 
 	async apiFetch(method){
