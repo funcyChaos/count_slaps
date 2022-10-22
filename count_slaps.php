@@ -28,7 +28,7 @@ add_action('rest_api_init', function(){
 				if(get_option('toggle_counting')){
 					$body = $req->get_json_params();
 					global $wpdb;
-					$wpdb->query('BEGIN');
+					$wpdb->query('BEGIN TRAN');
 					$current = $wpdb->get_results(
 						"SELECT count FROM `{$wpdb->base_prefix}count_slaps` WHERE id in (1,2) FOR UPDATE
 					", ARRAY_N);
@@ -44,7 +44,6 @@ add_action('rest_api_init', function(){
 					", $res['team1'], $res['team2']);
 					$wpdb->query($query);
 					$wpdb->query('COMMIT');
-					$wpdb->query('END');
 					return $res;
 				}else{return array('response'=>'Slaps are closed!','team1'=>'idk','team2'=>'idk');}
 			}
