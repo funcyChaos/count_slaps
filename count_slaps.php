@@ -24,7 +24,7 @@ add_action('rest_api_init', function(){
 		),
 		array(
 			'methods'	=> 'POST',
-			'callback'	=> function ($req){
+			'callback'	=> function($req){
 				if(get_option('toggle_counting')){
 					$body = $req->get_json_params();
 					global $wpdb;
