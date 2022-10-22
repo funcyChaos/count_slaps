@@ -1,5 +1,5 @@
 setTimeout(() => {
-	window.location.replace(`${url}/#top"`);
+	window.location.replace(`${url}/fight-test#top"`);
 }, 300000);
 
 class SlapCounter{
