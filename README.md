@@ -11,6 +11,8 @@ A plugin to count slaps for FOTA fights at Chilis
 
 Securely and rapidly update a small table to count slaps in the wordpress database using a transaction every 800ms
 
+<img src="./slap-fight.png" alt="latest counter">
+
 ### Required ID's:
 (where x is the team number)
 
