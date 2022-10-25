@@ -28,7 +28,7 @@ add_action('rest_api_init', function(){
 				if(get_option('toggle_counting')){
 					$body = $req->get_json_params();
 					global $wpdb;
-					$wpdb->query('BEGIN TRAN');
+					$wpdb->query('START TRANSACTION');
 					$current = $wpdb->get_results(
 						"SELECT count FROM `{$wpdb->base_prefix}count_slaps` WHERE id in (1,2) FOR UPDATE
 					", ARRAY_N);
