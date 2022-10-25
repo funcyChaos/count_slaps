@@ -30,7 +30,11 @@ add_action('rest_api_init', function(){
 					global $wpdb;
 					$wpdb->query('START TRANSACTION');
 					$current = $wpdb->get_results(
-						"SELECT count FROM `{$wpdb->base_prefix}count_slaps` WHERE id in (1,2) FOR UPDATE
+						"SELECT count
+						FROM `{$wpdb->base_prefix}count_slaps` 
+						WHERE id
+						IN (1,2)
+						FOR UPDATE
 					", ARRAY_N);
 					$res['team1'] = $current[0][0] + $body['team1'];
 					$res['team2'] = $current[1][0] + $body['team2'];
