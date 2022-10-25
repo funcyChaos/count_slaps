@@ -8,12 +8,15 @@
 	Author URI: https://funcychaos.github.io
 */
 
-// Slap a team!
-function tally_slaps(){
+public function slap_nonce_verify(){
 	if(!wp_verify_nonce($_REQUEST['nonce'], 'count_slaps_nonce')){
 		exit('{"response": "GTFOH!"}');
-	}
-	
+	}	
+}
+
+// Slap a team!
+function tally_slaps(){
+	slap_nonce_verify();
 	if(get_option('toggle_counting')){
 		$team1 = get_option('team1', 0)+$_REQUEST['team1'];
 		$team2 = get_option('team2', 0)+$_REQUEST['team2'];
@@ -47,10 +50,7 @@ add_action("wp_ajax_nopriv_return_slaps", "return_slaps");
 
 // Set all slaps back to 0
 function reset_slaps(){
-	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){
-		exit('{"response": "GTFOH!"}');
-	}
-
+	slap_nonce_verify();
 	delete_option('team1');
 	delete_option('team2');
 
@@ -62,10 +62,7 @@ add_action('wp_ajax_nopriv_reset_slaps', function(){die();});
 
 // Turn slap counting on and off
 function toggle_slaps(){
-	if(!wp_verify_nonce($_REQUEST['nonce'], 'fota_secret_password')){
-		exit('{"response": "GTFOH!"}');
-	}
-	
+	slap_nonce_verify();
 	$return['team1'] = get_option('team1', 0);
 	$return['team2'] = get_option('team2', 0);
 	
