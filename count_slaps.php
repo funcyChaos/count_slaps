@@ -25,8 +25,13 @@ add_action('rest_api_init', function(){
 		array(
 			'methods'	=> 'POST',
 			'callback'	=> function ($req){
-				if(get_option('toggle_counting')){
+				if(!get_option('toggle_counting')){
+					return array('response'=>'Slaps are closed!','team1'=>'idk','team2'=>'idk');
+				}
 					$body = $req->get_json_params();
+					if($body['team1'] > 9 || $body['team2'] > 9){
+						return array('honey badger' => "don't give a fuck","team1"=>"gtfoh","team2"=>"gtfoh");
+					}
 					global $wpdb;
 					$wpdb->query('START TRANSACTION');
 					$current = $wpdb->get_results(
@@ -49,7 +54,6 @@ add_action('rest_api_init', function(){
 					$wpdb->query($query);
 					$wpdb->query('COMMIT');
 					return $res;
-				}else{return array('response'=>'Slaps are closed!','team1'=>'idk','team2'=>'idk');}
 			}
 		)
 	));

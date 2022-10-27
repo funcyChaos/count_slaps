@@ -69,7 +69,7 @@ class SlapCounter{
 					this.slapCount2 = 0;
 					this.tallying		= false;
 				});
-			}, 800);
+			}, 1000);
 		}
 	}
 
