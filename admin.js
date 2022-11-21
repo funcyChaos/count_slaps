@@ -5,50 +5,50 @@ let nonce;
 
 function returnSlaps(){
 	
-	ajaxFetch('return_slaps').then(object=>{
+	ajaxFetch("return_slaps").then(object=>{
 		
-		counter1.innerHTML = object['team1'];
-		counter2.innerHTML = object['team2'];
+		counter1.innerHTML = object["team1"];
+		counter2.innerHTML = object["team2"];
 		console.log(object);
 	});
 }
 
 function adminReset(){
 
-	const sure = confirm('Are you sure you want to reset all the slaps?');
+	const sure = confirm("Are you sure you want to reset all the slaps?");
 	
 	if(sure){
 
-		ajaxFetch('reset_slaps', nonce).then(object=>{
+		ajaxFetch("reset_slaps", nonce).then(object=>{
 			
 			console.log(object);
-			counter1.innerHTML = '0';
-			counter2.innerHTML = '0';
+			counter1.innerHTML = "0";
+			counter2.innerHTML = "0";
 		});
 	}
 }
 
 function toggleCounting(){
 
-	ajaxFetch('toggle_slaps', nonce).then(object=>{
+	ajaxFetch("toggle_slaps", nonce).then(object=>{
 		
 		console.log(object);
-		counter1.innerHTML = object['team1'];
-		counter2.innerHTML = object['team2'];
-		document.getElementById('count-toggle').innerHTML = object['state'] ? 'Stop Counting' : 'Start Counting';
+		counter1.innerHTML = object["team1"];
+		counter2.innerHTML = object["team2"];
+		document.getElementById("count-toggle").innerHTML = object["state"] ? "Stop Counting" : "Start Counting";
 	})
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener("DOMContentLoaded", ()=>{
 
-	counter1 = document.getElementById('team1');
-	counter2 = document.getElementById('team2');
-	nonce = document.getElementById('nonce-div').getAttribute('data-nonce');
+	counter1 = document.getElementById("team1");
+	counter2 = document.getElementById("team2");
+	nonce = document.getElementById("nonce-div").getAttribute("data-nonce");
 
-	ajaxFetch('return_slaps').then(object=>{
+	ajaxFetch("return_slaps").then(object=>{
 		
-		counter1.innerHTML = object['team1'];
-		counter2.innerHTML = object['team2'];
+		counter1.innerHTML = object["team1"];
+		counter2.innerHTML = object["team2"];
 		console.log(object);
 	});
 });
@@ -63,7 +63,7 @@ async function ajaxFetch(action, nonce, x, y){
 		method: "POST",
 		headers: {
 
-			'content-Type': 'application/x-www-form-urlencoded; charset-UTF-8'
+			"content-Type": "application/x-www-form-urlencoded; charset-UTF-8"
 		},
 		body: `action=${action}&nonce=${nonce}&var1=${var1}&var2=${var2}`
 	});

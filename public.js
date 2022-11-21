@@ -15,16 +15,16 @@ function setWaiting(){
 	}
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-	xmlCount1	= document.getElementById('xml_count_1').children[0].children[0];
-	xmlCount2	= document.getElementById('xml_count_2').children[0].children[0];
+document.addEventListener("DOMContentLoaded", ()=>{
+	xmlCount1	= document.getElementById("xml_count_1").children[0].children[0];
+	xmlCount2	= document.getElementById("xml_count_2").children[0].children[0];
 
-	document.getElementById('slap_btn_1').addEventListener('click',()=>{
+	document.getElementById("slap_btn_1").addEventListener("click",()=>{
 		slapQueue.enqueue(()=>slap(1));
 		setWaiting();
 	});
 
-	document.getElementById('slap_btn_2').addEventListener('click',()=>{
+	document.getElementById("slap_btn_2").addEventListener("click",()=>{
 		slapQueue.enqueue(()=>slap(2));
 		setWaiting();
 	});
@@ -44,8 +44,8 @@ const slap	= (team) => new Promise(r => r(team))
 const slaps	= () => new Promise(r=>r())
   .then(()=>{
 		fetch(`${url}/wp-json/count-slaps/tally-slaps/0`).then(res=>res.json()).then(obj=>{
-			xmlCount1.innerText = obj['team1'];
-			xmlCount2.innerText = obj['team2'];
+			xmlCount1.innerText = obj["team1"];
+			xmlCount2.innerText = obj["team2"];
 			console.log(obj);
 		});
 });
