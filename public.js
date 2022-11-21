@@ -2,23 +2,34 @@
 // 	window.location.replace(`${url}/fight-test#top"`);
 // }, 300000);
 
+let waitingForTimeout = false;
+function setWaiting(){
+	if(waitingForTimeout){
+		return;
+	}else{
+		waitingForTimeout = true;
+		setTimeout(() => {
+			slapQueue.enqueue(()=>slaps());
+			waitingForTimeout = false;
+		}, 3000);
+	}
+}
+
 document.addEventListener('DOMContentLoaded', ()=>{
 	xmlCount1	= document.getElementById('xml_count_1').children[0].children[0];
 	xmlCount2	= document.getElementById('xml_count_2').children[0].children[0];
 
 	document.getElementById('slap_btn_1').addEventListener('click',()=>{
 		slapQueue.enqueue(()=>slap(1));
+		setWaiting();
 	});
 
 	document.getElementById('slap_btn_2').addEventListener('click',()=>{
 		slapQueue.enqueue(()=>slap(2));
+		setWaiting();
 	});
 	
 	slapQueue.enqueue(()=>slaps());
-
-	setInterval(() => {
-		slapQueue.enqueue(()=>slaps());
-	}, 3000);
 });
 
 const slap	= (team) => new Promise(r => r(team))
