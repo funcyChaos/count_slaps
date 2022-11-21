@@ -9,7 +9,7 @@
 */
 
 add_action('rest_api_init', function(){
-	register_rest_route('count-slaps', '/tally-slaps', array(
+	register_rest_route('count-slaps', '/tally-slaps/(?P<team>\d+)', array(
 		array(
 			'methods'	=> 'GET',
 			'callback'	=> function (){
@@ -18,7 +18,8 @@ add_action('rest_api_init', function(){
 					"SELECT count FROM `{$wpdb->base_prefix}count_slaps` WHERE id in (1,2)
 					", ARRAY_N);
 				$res['team1'] = $current[0][0];
-				$res['team2'] = $current[1][0];				
+				$res['team2'] = $current[1][0];
+				update_option("test", $current[0]);
 				return $res;
 			}
 		),
@@ -28,32 +29,29 @@ add_action('rest_api_init', function(){
 				if(!get_option('toggle_counting')){
 					return array('response'=>'Slaps are closed!','team1'=>'idk','team2'=>'idk');
 				}
-					$body = $req->get_json_params();
-					if($body['team1'] > 9 || $body['team2'] > 9){
-						return array('honey badger' => "don't give a fuck","team1"=>"gtfoh","team2"=>"gtfoh");
-					}
-					global $wpdb;
-					$wpdb->query('START TRANSACTION');
-					$current = $wpdb->get_results(
-						"SELECT count
-						FROM `{$wpdb->base_prefix}count_slaps` 
-						WHERE id
-						IN (1,2)
-						FOR UPDATE
-					", ARRAY_N);
-					$res['team1'] = $current[0][0] + $body['team1'];
-					$res['team2'] = $current[1][0] + $body['team2'];
+				global $wpdb;
+				$wpdb->query('BEGIN TRAN');
+				if($req["team"] == 1){
 					$query = $wpdb->prepare(
 						"UPDATE `{$wpdb->base_prefix}count_slaps`
-						SET count = CASE id
-						WHEN 1 THEN %d
-						WHEN 2 THEN %d
-						ELSE 3 END
-						WHERE id IN(1, 2)
-					", $res['team1'], $res['team2']);
+						SET count = count + 1
+						WHERE id = 1
+					");
 					$wpdb->query($query);
 					$wpdb->query('COMMIT');
-					return $res;
+					return array("Slap"=>"Successful");
+				}elseif($req["team"] == 2){
+					$query = $wpdb->prepare(
+						"UPDATE `{$wpdb->base_prefix}count_slaps`
+						SET count = count + 1
+						WHERE id = 2
+					");
+					$wpdb->query($query);
+					$wpdb->query('COMMIT');
+					return array("Slap"=>"Successful");
+				}else{
+					return array("Hi"=>"Idk what you want");
+				}
 			}
 		)
 	));
