@@ -13,16 +13,14 @@ Securely and rapidly update a small table to count slaps in the wordpress databa
 
 <img src="./slap-fight.png" alt="latest counter">
 
-### Required ID"s:
+### Required ID's:
 (where x is the team number)
 
 ```
-#xml_count_x 	= ID to show/adjust teamx"s count
+#xml_count_x 	= ID to show/adjust teamx's count
 (Deprecated right now because of Visual Composer;
 	ID plus two children deep ie [0][0]
 )
-
-#teamx_bonus 	= ID to show teamx"s bonus
 
 #slap_btn_x 	= ID that will add slaps to teamx when clicked
 ```
