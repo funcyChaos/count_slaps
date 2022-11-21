@@ -9,7 +9,7 @@ function setWaiting(){
 	}else{
 		waitingForTimeout = true;
 		setTimeout(() => {
-			slapQueue.enqueue(()=>slaps());
+			slapQueue.enqueue(()=>getSlaps());
 			waitingForTimeout = false;
 		}, 3000);
 	}
@@ -20,30 +20,30 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	xmlCount2	= document.getElementById("xml_count_2").children[0].children[0];
 
 	document.getElementById("slap_btn_1").addEventListener("click",()=>{
-		slapQueue.enqueue(()=>slap(1));
+		slapQueue.enqueue(()=>postSlap(1));
 		setWaiting();
 	});
 
 	document.getElementById("slap_btn_2").addEventListener("click",()=>{
-		slapQueue.enqueue(()=>slap(2));
+		slapQueue.enqueue(()=>postSlap(2));
 		setWaiting();
 	});
 	
-	slapQueue.enqueue(()=>slaps());
+	slapQueue.enqueue(()=>getSlaps());
 });
 
-const slap	= (team) => new Promise(r => r(team))
+const postSlap	= (team) => new Promise(r => r(team))
   .then(res => {
-		fetch(`${url}/wp-json/count-slaps/tally-slaps/${res}`, {
+		fetch(`${url}/wp-json/count-slaps/slaps/${res}`, {
 			method: "POST",
 		})
 			.then(res=>res.json())
 			.then(obj=>console.log(obj));
 });
 
-const slaps	= () => new Promise(r=>r())
+const getSlaps	= () => new Promise(r=>r())
   .then(()=>{
-		fetch(`${url}/wp-json/count-slaps/tally-slaps/0`).then(res=>res.json()).then(obj=>{
+		fetch(`${url}/wp-json/count-slaps/slaps/0`).then(res=>res.json()).then(obj=>{
 			xmlCount1.innerText = obj["team1"];
 			xmlCount2.innerText = obj["team2"];
 			console.log(obj);

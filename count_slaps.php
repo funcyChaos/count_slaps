@@ -9,7 +9,7 @@
 */
 
 add_action("rest_api_init", function(){
-	register_rest_route("count-slaps", "/tally-slaps/(?P<team>\d+)", array(
+	register_rest_route("count-slaps", "/slaps/(?P<team>\d+)", array(
 		array(
 			"methods"	=> "GET",
 			"callback"	=> function (){
